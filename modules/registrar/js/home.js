@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const calendarEl = document.getElementById('homeCalendar');
@@ -216,10 +217,10 @@ document.addEventListener('DOMContentLoaded', function () {
             {
                 id: 'db-events',          
                 url: `${BASE_URL}/calendar/events`,
-                method: 'GET',
-                failure: function() {
-                    alert('There was an error fetching events!');
-                }
+                method: 'GET'
+                // failure: function() {
+                //     alert('There was an error fetching events!');
+                // }
             }
         ],
 

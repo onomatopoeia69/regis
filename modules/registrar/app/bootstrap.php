@@ -8,6 +8,7 @@ use App\Core\Database;
 
 $isCli = php_sapi_name() === 'cli';
 
+
 define('CURRENT_URI',$isCli ? '' : basename($_SERVER['REQUEST_URI']));
 define('BASE_PATH', dirname(__DIR__));
 define('PUBLIC_PATH',BASE_PATH.'/public');
