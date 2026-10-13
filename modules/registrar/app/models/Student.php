@@ -277,7 +277,7 @@
 
     $year_level = $_GET['year_level'] ?? '';
     $course = $_GET['course'] ?? '';
-    $school_year_select = $_GET['school_year'] ?? '';
+    $section = $_GET['section'] ?? '';
      
     $perPage = isset($_GET['limit']) ? (int) $_GET['limit'] : 10;
     $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -312,9 +312,9 @@
     $params[':course'] = $course;
    }
 
-   if (!empty($school_year_select) && $school_year_select !== 'all_school_year') {
-    $where .= " AND sem.school_year_id = :school_year";
-    $params[':school_year'] = $school_year_select;
+    if ($section !== '') {
+    $where .= " AND stud.section_id = :section";
+    $params[':section'] = $section;
    }
 
 

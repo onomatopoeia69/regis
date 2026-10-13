@@ -74,6 +74,7 @@ $logo = dirname(__DIR__, 2) . '/assets/images/bestlink.png';
 
 <div class="content">
     <h3 style="text-align:center;"><?= $status ?? '' ?> Student List</h3>
+    <h3 style="text-align:center;"><?= $section['section_code'] ?? '' ?> </h3>
     <h3 style="text-align:center;">(<?= $students['schoolYear'] ?? '' ?>)</h3>   
 
     <table width="100%">

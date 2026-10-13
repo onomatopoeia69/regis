@@ -145,6 +145,42 @@
 
       <h5>Filter</h5>
 
+           <div class="form-floating mb-1">
+            
+       <select id="filter_school_year"  class="form-select mb-1" >
+            <?php foreach($sy as $school_year) { ?>
+        <option 
+            value="<?= $school_year['id']; ?>"
+             <?= $school_year['is_active'] == 1 ? 'selected' : ''; ?>
+        >
+         <?= $school_year['name']; ?>
+        </option>
+    
+        <?php  } ?> 
+      </select>
+
+      <label for="floatingSelect">School Year</label>
+
+      </div>
+
+
+           <div class="form-floating mb-2 " id="semester-container" >
+      <select id="filter_semester" class="form-select" aria-label="Floating label select example">
+        <option value="">All Semester</option>
+         
+        <option 
+            value=""
+        >
+        
+        </option>
+    
+      </select>
+     
+
+      <label for="floatingSelect">Semester</label>
+
+      </div>
+
 
         <div class="form-floating mb-2">
       <select id="filter_course" class="form-select" aria-label="Floating label select example">
@@ -164,6 +200,23 @@
       <label for="floatingSelect">Course</label>
 
       </div>
+
+        <div class="form-floating mb-2 " id="course-container" >
+      <select id="filter_section" class="form-select" aria-label="Floating label select example">
+        <option value="">All Sections</option>
+         
+        <option 
+            value=""
+        >
+        
+        </option>
+    
+      </select>
+     
+
+      <label for="floatingSelect">Section</label>
+
+     </div>
 
 
 

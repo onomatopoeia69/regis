@@ -94,7 +94,7 @@
              <li><a href="<?php echo BASE_URL?>/exam" class="menu-link <?php echo CURRENT_URI  === "exam" ? 'active' : '' ?>" id="Enrollees">Exam</a></li>
              <li><a href="<?php echo BASE_URL?>/academic-records" class="menu-link <?php echo CURRENT_URI  === "academic-records" ? 'active' : '' ?>" id="Enrollment">Academic Records</a></li>
              <li><a href="<?php echo BASE_URL?>/class-list" class="menu-link <?php echo CURRENT_URI  === "class-list" ? 'active' : '' ?>" id="Enrollment">Class List</a></li>
-             <li><a href="<?php echo BASE_URL?>/grades" class="menu-link <?php echo CURRENT_URI  === "grades" ? 'active' : '' ?>" id="Enrollees">Grades</a></li>
+             <li><a href="<?php echo BASE_URL?>/grades" class="menu-link <?php echo CURRENT_URI  === "grades" ? 'active' : '' ?>" id="Enrollees">Grades Assesment</a></li>
         </ul>
         </div>
 

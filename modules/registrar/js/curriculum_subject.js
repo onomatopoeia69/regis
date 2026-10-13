@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(this);
 
+        
+
         fetch( this.action, { 
             method: 'POST',    
             body: formData,
@@ -81,12 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
              option.style.display = "block";
             });
 
-
-           
-
              getAll(CurrId);
 
-           
 
             Swal.fire({
                 title: "Success!",
@@ -99,6 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => console.log(err));
     });
+
+    
 
      // for the  submit btn
     document.getElementById('curriculumSubjectSubmitBtn').addEventListener('click', function() {
@@ -119,16 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
          const currSubID = e.target.dataset.id;    
   
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: `Yes, delete`,
-            }).then((result) => {
-            if (result.isConfirmed) {
+      
 
                 fetch(`${BASE_URL}/curriculum-subject/delete`, {
                     method: 'POST',
@@ -140,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if(data.success){
                         Swal.fire({
                             title: "Deleted!",
-                            text: "Item has been deleted.",
+                            text: "Item has been removed.",
                             icon: "success"
                             });
 
@@ -149,9 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         alert('Delete failed!');
                     }
                 });
-                
-            }
-            });
+         
 
 
        }

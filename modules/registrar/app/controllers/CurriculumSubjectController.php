@@ -60,57 +60,72 @@ public function allCurriculumSubject($id)
 
 
     public function store()
-    {
-        
-         header('Content-Type: application/json');
+{
+    header('Content-Type: application/json');
 
-        $errors = [];
+    $errors = [];
 
-            $curriculum_id = trim($_POST['curriculum_id'] ?? '');
-            $subject_id = trim($_POST['subject_id'] ?? '');
-            $year_level = trim($_POST['year_level'] ?? '');
-            $semester = trim($_POST['semester'] ?? '');
-       
+    $curriculum_id = trim($_POST['curriculum_id'] ?? '');
+    $subject_id    = trim($_POST['subject_id'] ?? '');
+    $year_level    = trim($_POST['year_level'] ?? '');
+    $semester      = trim($_POST['semester'] ?? '');
 
-        if( CurriculumSubject::isDuplicate([
-            
-          'subject_id ' => $subject_id,
-          'curriculum_id' => $curriculum_id
-       
-        ])){
-          $errors['subject_id'] = "This subject is already taken.";
-        }
-        
+    // Validation
+    if (empty($curriculum_id)) {
+        $errors['curriculum_id'] = 'Curriculum is required.';
+    }
 
-        if (!empty($errors)) {
-            echo json_encode([
-                'status' => 'error',
-                'errors' => $errors
-            ]);
-            return;
-        }
-       
-          CurriculumSubject::create([
-           
-            'curriculum_id' =>  $curriculum_id,
+    if (empty($subject_id)) {
+        $errors['subject_id'] = 'Subject is required.';
+    }
+
+    if (empty($year_level)) {
+        $errors['year_level'] = 'Year level is required.';
+    }
+
+    if (empty($semester)) {
+        $errors['semester'] = 'Semester is required.';
+    }
+
+    // Duplicate check
+    if (empty($errors)) {
+
+        if (CurriculumSubject::isDuplicate([
             'subject_id' => $subject_id,
-            'year_level' => $year_level,
-            'semester' => $semester
+            'curriculum_id' => $curriculum_id
+        ])) {
+            $errors['subject_id'] = 'This subject is already taken.';
+        }
+    }
 
-          ]);
-
-            Logger::log(
-                "Created A New Curriculum Subject ",
-                "Created A New Curriculum Subject for System"
-            );
-
+    if (!empty($errors)) {
         echo json_encode([
-            'status' => 'success',
-            'message' => 'New Curriculum created successfully.'
+            'status' => 'error',
+            'errors' => $errors
         ]);
+        return;
+    }
 
-      }
+    // Create curriculum subject
+    CurriculumSubject::create([
+        'curriculum_id' => $curriculum_id,
+        'subject_id'    => $subject_id,
+        'year_level'    => $year_level,
+        'semester'      => $semester
+    ]);
 
+    Logger::log(
+        "Created A New Curriculum Subject",
+        "Created A New Curriculum Subject for System"
+    );
+
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'New Curriculum Subject created successfully.'
+    ]);
+}
+
+    
         public function destroy()
       {
         header('Content-Type: application/json');

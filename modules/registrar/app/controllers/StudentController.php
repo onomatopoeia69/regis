@@ -32,12 +32,14 @@ class StudentController extends Controller {
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();  
         $course = Course::all(); 
+        $sy = SchoolYear::all();
         
         $this->render('/students/index', 
         [
             'user' => $user,
              'course' => $course,
              'semester' => $semester,
+             'sy' => $sy,
              'schoolYear' => $schoolYear
         ]);
     
@@ -307,6 +309,7 @@ class StudentController extends Controller {
     {
        
         $status = $_GET['status'];
+        $section = $_GET['section'];
    
 
           Logger::log(
@@ -316,7 +319,7 @@ class StudentController extends Controller {
 
         $dompdf = new Dompdf();
         
-
+        $section = Section::find($section);   
         $status = ucfirst($_GET['status']);
         $bcp_logo = $this->imageRender('bcp-logo.png');
         $ched_logo = $this->imageRender('ched.png');
@@ -327,7 +330,7 @@ class StudentController extends Controller {
         
     
         $this->render('/pdf/student',[
-
+            'section' => $section,
             'students' => $students,
             'school_image' => $bcp_logo,
             'ched_image' => $ched_logo,

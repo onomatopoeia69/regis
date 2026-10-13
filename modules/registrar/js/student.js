@@ -1,5 +1,8 @@
   
    let filters = {
+    school_year:'',
+    section:'',
+    semester: '',
     course:'',
     year_level:''
     };
@@ -51,14 +54,69 @@
 
 
 
-
+    const schoolYearSelect = document.getElementById('filter_school_year');
+    const semesterSelect = document.getElementById('filter_semester');
+    const sectionSelect = document.getElementById('filter_section');
     const schoolYearLevelSelect = document.getElementById('filter_year_level');
     const courseSelect = document.getElementById('filter_course');
-
     const defaultCourseSelect = courseSelect.value;
     const defaultSchoolYearLevelSelect = schoolYearLevelSelect.value;
+    const defaultSchoolYear = schoolYearSelect.options[schoolYearSelect.selectedIndex].value;  
 
 
+       schoolYearSelect.addEventListener('change', function () {
+
+    const schoolYearId = this.value;
+
+    semesterSelect.innerHTML =
+        '<option value="">All Semester</option>';
+
+    sectionSelect.innerHTML =
+        '<option value="">All Sections</option>';                             
+
+
+    if (!schoolYearId) return;
+
+    fetch(`${BASE_URL}/section/semester?school_year=${schoolYearId}`)
+        .then(res => res.json())
+        .then(data => {
+
+            data.forEach(semester => {
+
+                semesterSelect.innerHTML += `
+                    <option value="${semester.id}">
+                        ${semester.name}
+                    </option>
+                `;
+
+            });
+
+        });
+});
+
+   semesterSelect.addEventListener('change', function () {
+
+    const semesterId = this.value;
+
+
+    if (!semesterId) return;
+
+    fetch(`${BASE_URL}/semester/${semesterId}/section`)
+        .then(res => res.json())
+        .then(data => {
+
+            data.forEach(section => {
+
+                sectionSelect.innerHTML += `
+                    <option value="${section.id}">
+                        ${section.section_code}
+                    </option>
+                `;
+
+            });
+
+        });
+    });
 
     filterBtn.addEventListener('click',function(){
   
@@ -70,10 +128,12 @@
     
     document.getElementById('resetFilter').addEventListener('click', function() {
     
+    filters.semester = semesterSelect.value = '';
+    filters.school_year = schoolYearSelect.value = defaultSchoolYear;
+    filters.section = sectionSelect.value = '';
     filters.course = courseSelect.value = defaultCourseSelect;
     filters.year_level = schoolYearLevelSelect.value = defaultSchoolYearLevelSelect;
 
-    
 
     updateFilterBadge();
     
@@ -86,6 +146,9 @@
 
      document.getElementById("applyFilter").addEventListener("click", () => {
 
+    filters.semester = semesterSelect.value;
+    filters.section  = sectionSelect.value;
+    filters.school_year =  schoolYearSelect.value;
     filters.course = courseSelect.value;
     filters.year_level = schoolYearLevelSelect.value;
     
@@ -157,6 +220,9 @@
 
     let count = 0;
 
+    if (filters.semester) count++;
+    if (filters.school_year) count++;
+    if(filters.section) count++;
     if (filters.year_level) count++;
     if(filters.course) count++;
     if (count > 0) {
@@ -167,11 +233,15 @@
     }   
     }
 
+ 
+
+
     // pdf data 
 
     function getPdf(status)
     {
         const search = document.getElementById("search").value;
+        const section = filters.section; 
 
         //  fetch(`${BASE_URL}/students/pdf?status=${status}&search=${encodeURIComponent(search)}`)
         // .then(response => response.blob())
@@ -185,7 +255,7 @@
         // take this if you dont want redirection confirmation 
 
         window.open(
-        `${BASE_URL}/students/pdf?status=${status}&search=${encodeURIComponent(search)}`,
+        `${BASE_URL}/students/pdf?status=${status}&section=${section}&search=${encodeURIComponent(search)}`,
         "_blank"
         );
     }
@@ -217,7 +287,7 @@
     const search = document.getElementById("search").value;
     const tbody = document.getElementById("studentsTableBody");
 
-    fetch(`${BASE_URL}/students/all?status=${status}&limit=${limit}&page=${page}&search=${encodeURIComponent(search)}&year_level=${filters.year_level}&course=${filters.course}`)
+    fetch(`${BASE_URL}/students/all?status=${status}&limit=${limit}&page=${page}&search=${encodeURIComponent(search)}&year_level=${filters.year_level}&course=${filters.course}&section=${filters.section}`)
         .then(response => response.json())
         .then(result => {
 

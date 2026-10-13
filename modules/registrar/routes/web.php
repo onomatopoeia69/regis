@@ -317,6 +317,8 @@ $r->get('/exam-schedule/pdf',[ExaminationScheduleController::class,'examSchedule
 // grades 
 
 $r->get('/grades',[GradeController::class,'index']);
+$r->get('/grades/all',[GradeController::class,'allRegistrarGrades']);
+
 
 
 

@@ -560,33 +560,91 @@
 
 function renderPagination(current, last) {
 
-    
+        
     const container = document.getElementById("pagination");
     container.innerHTML = "";
 
-    if (last <= 1) return;
+    const ul = document.createElement("ul");
+    ul.className = "pagination";
 
-    for (let i = 1; i <= last; i++) {
+    let start = Math.max(1, current - 2);
+    let end = Math.min(last, current + 2);
 
-    const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.className = "btn btn-sm " + (i === current ? "btn-primary" : "btn-outline-primary");
-        
-        btn.addEventListener("click", function() {
 
-            const status = document.getElementById("order").value;
+
+    if (current > 1) {
+        const li = document.createElement("li");
+        li.className = "page-item";
+
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = "#";
+        link.innerHTML = "&laquo;";
+
+        link.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const order = document.getElementById("order").value;
             const limit = document.getElementById("limit").value;
-
-            getData(status, limit, i);
-
+            getData(order, limit, current - 1);
         });
 
-        container.appendChild(btn);
+        li.appendChild(link);
+        ul.appendChild(li);
     }
+
+
+
+    for (let i = start; i <= end; i++) {
+
+        const li = document.createElement("li");
+        li.className = "page-item " + (i === current ? "active" : "");
+
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = "#";
+        link.textContent = i;
+
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            const order = document.getElementById("order").value;
+            const limit = document.getElementById("limit").value;
+
+            getData(order, limit, i);
+        });
+
+        li.appendChild(link);
+        ul.appendChild(li);
+    }
+
+    if (current < last) {
+        const li = document.createElement("li");
+        li.className = "page-item";
+
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = "#";
+        link.innerHTML = "&raquo;";
+
+        link.addEventListener("click", function(e){
+            e.preventDefault();
+
+            const order = document.getElementById("order").value;
+            const limit = document.getElementById("limit").value;
+            getData(order, limit, current + 1);
+        });
+
+        li.appendChild(link);
+        ul.appendChild(li);
+    }
+
+
+    container.appendChild(ul);
+
 
     
 }
-
 
 function renderResultInfo(result) {
 
@@ -606,6 +664,8 @@ function renderResultInfo(result) {
 
     info.textContent = `Showing ${start}–${end} of ${result.total} results`;
 }
+
+
 
 
 

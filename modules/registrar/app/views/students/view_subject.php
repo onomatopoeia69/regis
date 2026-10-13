@@ -63,7 +63,7 @@
 
             <!-- Header -->
             <div class="modal-header">
-                <h5 class="modal-title fw-semibold">Add Curriculum Subject</h5>
+                <h5 class="modal-title fw-semibold">Add Curriculum Subjects</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeBtn"></button>
             </div>
 
@@ -187,7 +187,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script> const BASE_URL = "<?php echo BASE_URL ?>" </script>
 <script>
-     const CurriculumID = <?= (int)$id ?>;
+     const CurriculumID = <?= (int) $id ?>;
 </script>
 <script src="<?= BASE_URL ?>/js/curriculum_subject.js"></script>
 
