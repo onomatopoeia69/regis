@@ -5,3 +5,7 @@
 # FOR REGISTRAR
 /modules/registrar/vendor/
 /modules/registrar/.env
+
+# FOR FACULTY
+/faculty/vendor/
+/faculty/.env
