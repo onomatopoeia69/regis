@@ -8,7 +8,7 @@
 class Employee extends Model 
 {
 
-    public $tableName = 'sms_employee';
+    public $tableName = 'em_employees';
     public $primaryKey = 'employee_id'; 
 
     public static function __callStatic($name, $arguments)
