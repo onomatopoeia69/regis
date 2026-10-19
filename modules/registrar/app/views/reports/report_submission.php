@@ -176,11 +176,11 @@
                         <select name="report" class="form-control" required>
                         <option value="">All Reports</option>
                             <?php foreach ($reports as $report): ?>
-                                  <?php if ($report['department_id'] == 3): ?>
+                            
                                 <option value="<?= $report['type_id'] ?>">
                                     <?= htmlspecialchars($report['report_type']) ?>
                                 </option>
-                                  <?php endif; ?>
+                    
                             <?php endforeach; ?>
                         </select>
 
