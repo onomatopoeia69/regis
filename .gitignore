@@ -1,11 +1,14 @@
 # FOR STUDENT
 /student/vendor/
 /student/.env
+/student/public
 
 # FOR REGISTRAR
 /modules/registrar/vendor/
 /modules/registrar/.env
+/modules/registrar/uploads
 
 # FOR FACULTY
 /faculty/vendor/
 /faculty/.env
+/faculty/public
