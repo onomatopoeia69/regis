@@ -20,7 +20,7 @@ class SectionController extends Controller
     public function index()
     {
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $course = Course::all();
         $semester = Section::activeSchoolYearSemester();
         $school_year = SchoolYear::all();

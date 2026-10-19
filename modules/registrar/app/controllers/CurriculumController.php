@@ -18,7 +18,7 @@ use App\Models\Semester;
       {
        
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $course = Course::all();
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
@@ -185,7 +185,7 @@ use App\Models\Semester;
 
      public function view($id)
     {
-        $user = Employee::find('1003');
+        $user = Employee::find('1014');
         $this->render('/students/view_subject', ['user' => $user , 'id' => $id]);
 
     }

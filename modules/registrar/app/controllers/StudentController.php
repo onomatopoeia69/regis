@@ -28,7 +28,7 @@ class StudentController extends Controller {
 
     public function index()
     {   
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();  
         $course = Course::all(); 
@@ -56,7 +56,7 @@ class StudentController extends Controller {
     {
   
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();       
     

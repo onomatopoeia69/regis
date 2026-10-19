@@ -19,7 +19,7 @@ class SubjectController extends Controller
 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();      
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         
         $this->render('/acad/subject',
          [

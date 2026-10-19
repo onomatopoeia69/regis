@@ -25,7 +25,7 @@ class ClassOfferingController extends Controller
     public function index()
     {
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $subject = Subject::all();
         $section = Section::all();
         $semester = ClassOffering::configSemesterYear();

@@ -20,7 +20,7 @@
     { 
 
         $departments = Department::all();
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear(); 
       
@@ -52,7 +52,7 @@
 
         $title = trim($_POST['report_title'] ?? '');
             $description = trim($_POST['report_description'] ?? '');
-            $submit_by = 1003; 
+            $submit_by = 1014; 
             $department =  trim($_POST['department'] ?? '');
 
             $filePath = null; 

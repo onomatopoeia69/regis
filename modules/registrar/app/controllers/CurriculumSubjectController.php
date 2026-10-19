@@ -25,7 +25,7 @@
         $curriculum = Curriculum::find($id);
         $course = Course::find($curriculum['course_id']);
         $subjects = Subject::all();
-        $user = Employee::find('1003');
+        $user = Employee::find('1014');
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
 

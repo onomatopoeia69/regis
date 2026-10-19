@@ -29,7 +29,7 @@ use Dompdf\Dompdf;
      $semester = Semester::activeSemester();
      $schoolYear = SchoolYear::activeSchoolYear();
      $section = SectionSchedule::getSectionScheduleAvailable();
-     $user = Employee::find('1003'); 
+     $user = Employee::find('1014'); 
      $this->render('/students/section_schedule',
      ['user' => $user, 
           'sections' => $section,

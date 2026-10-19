@@ -20,7 +20,7 @@ use Exception;
     {   
 
         $departments = Department::all();
-        $user = Employee::find('1003');
+        $user = Employee::find('1014');
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear(); 
       
@@ -51,7 +51,7 @@ use Exception;
 
         $title = trim($_POST['report_title'] ?? '');
             $description = trim($_POST['report_description'] ?? '');
-            $submit_by = 1003; 
+            $submit_by = 1014; 
 
         $filePath = null; 
 
@@ -139,7 +139,7 @@ use Exception;
 
             'decision' => 'Approved',
             'approved_at' => date('Y-m-d H:i:s'),
-            'approver_id' => 1003 
+            'approver_id' => 1014 
         ]);
 
         

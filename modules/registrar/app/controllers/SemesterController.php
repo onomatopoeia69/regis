@@ -20,7 +20,7 @@
     {
 
         $school_year = SchoolYear::all();
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
 

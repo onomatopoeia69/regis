@@ -24,7 +24,7 @@ use Dompdf\Dompdf;
     public function index()
     {
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
         $this->render('/students/enrollee', 
@@ -46,7 +46,7 @@ use Dompdf\Dompdf;
     {
   
 
-        $user = Employee::find('1003'); 
+        $user = Employee::find('1014'); 
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
 
