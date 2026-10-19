@@ -41,7 +41,7 @@
 
            <li>
             
-             <a class="dropdown-item text-danger" href="registrar.bcp-sms.com" >
+             <a class="dropdown-item text-danger" href="https://registrar.bcp-sms.com/" >
                 <i class="fa-solid fa-right-from-bracket"></i> Sign Out
             </a>
           </li>
