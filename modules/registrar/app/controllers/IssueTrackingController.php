@@ -59,7 +59,7 @@
 
     
         if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../uploads/approvals/';
+            $uploadDir = __DIR__ . '/../../uploads/issues/';
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
             $tmpName = $_FILES['attachment']['tmp_name'];
@@ -71,14 +71,14 @@
                 throw new Exception("File type not allowed.");
             }
 
-            $newFileName = 'approval_' . uniqid() . '.' . $ext;
+            $newFileName = 'issue_' . uniqid() . '.' . $ext;
             $filePath = $uploadDir . $newFileName;
 
             if (!move_uploaded_file($tmpName, $filePath)) {
                 throw new Exception("Failed to move uploaded file.");
             }
 
-            $filePath = 'uploads/approvals/' . $newFileName;
+            $filePath = 'uploads/issues/' . $newFileName;
         }
 
 
@@ -96,7 +96,7 @@
        
          Concern::create([
                 'title' => $title,
-                'description' => $description,
+                'details' => $description,
                 'submitted_by' => $submit_by,
                 'file_path' => $filePath,
                 'department' => $department

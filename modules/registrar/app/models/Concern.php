@@ -58,8 +58,8 @@ class Concern extends Model
             sd.department_name AS departments,
             CONCAT(se.first_name,' ',se.last_name) AS approver
         FROM {$this->tableName} s
-        LEFT JOIN sd_department sd ON s.department = sd.department_id
-        LEFT JOIN sms_employee se ON s.submitted_by = se.employee_id
+        LEFT JOIN em_departments sd ON s.department = sd.department_id
+        LEFT JOIN em_employees  se ON s.submitted_by = se.employee_id
         $where
         ORDER BY s.updated_at $order";
 

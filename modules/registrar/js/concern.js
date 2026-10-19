@@ -214,9 +214,12 @@
     // form action
 
    document.getElementById('addConcertSubmitForm').addEventListener('submit', function(e) {
+
+    
     e.preventDefault(); 
 
     const formData = new FormData(this);
+
 
     fetch(this.action, { 
         method: 'POST',    

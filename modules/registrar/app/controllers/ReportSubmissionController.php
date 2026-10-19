@@ -62,7 +62,7 @@
 
     
         if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../uploads/approvals/';
+            $uploadDir = __DIR__ . '/../../uploads/reports/';
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
             $tmpName = $_FILES['attachment']['tmp_name'];
@@ -74,14 +74,14 @@
                 throw new Exception("File type not allowed.");
             }
 
-            $newFileName = 'approval_' . uniqid() . '.' . $ext;
+            $newFileName = 'report_' . uniqid() . '.' . $ext;
             $filePath = $uploadDir . $newFileName;
 
             if (!move_uploaded_file($tmpName, $filePath)) {
                 throw new Exception("Failed to move uploaded file.");
             }
 
-            $filePath = 'uploads/approvals/' . $newFileName;
+            $filePath = 'uploads/reports/' . $newFileName;
         }
 
 

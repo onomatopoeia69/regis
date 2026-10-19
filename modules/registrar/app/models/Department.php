@@ -7,7 +7,7 @@
 class Department extends Model 
 {
 
-    public $tableName = 'sd_department';
+    public $tableName = 'em_departments';
     public $primaryKey = 'department_id';
 
     

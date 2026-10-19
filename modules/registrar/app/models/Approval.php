@@ -58,8 +58,8 @@ class Approval extends Model
             CONCAT(se.first_name,' ',se.last_name) AS submitter,
             CONCAT(ae.first_name,' ',ae.last_name) AS approver
         FROM {$this->tableName} s
-        LEFT JOIN sms_employee se ON s.submit_by = se.employee_id
-        LEFT JOIN sms_employee ae ON s.approver_id = ae.employee_id
+        LEFT JOIN em_employees  se ON s.submit_by = se.employee_id
+        LEFT JOIN em_employees  ae ON s.approver_id = ae.employee_id
         $where
         ORDER BY s.approved_at $order";
 

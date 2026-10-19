@@ -30,7 +30,7 @@
 
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-    $where = " WHERE submitted_by = 1014  ";
+    $where = " WHERE submitted_by = 1014";
     $params = [];
 
 
@@ -55,12 +55,12 @@
     // Base query
    $dataSql = "SELECT 
             s.*,
-            sd.department_name AS department,
+            em.department_name AS department,
             CONCAT(se.first_name,' ',se.last_name) AS submitted_by,
             sr.report_type as reportName
         FROM {$this->tableName} s
-        LEFT JOIN sd_department sd ON s.department_id = sd.department_id
-        LEFT JOIN sms_employee se ON s.submitted_by = se.employee_id
+        LEFT JOIN em_departments em ON s.department_id = em.department_id
+        LEFT JOIN em_employees se ON s.submitted_by = se.employee_id
         LEFT JOIN sd_report_type sr ON s.report_type = sr.type_id
         $where
         ORDER BY s.submitted_at $order";
