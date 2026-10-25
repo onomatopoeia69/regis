@@ -86,9 +86,7 @@
             JOIN cc_room ccr ON ccr.id = ccs.room_id
             JOIN cc_faculty_load ccfl ON ccfl.id = ccs.faculty_load_id
             JOIN cc_faculty ccf ON ccf.id = ccfl.faculty_id
-            WHERE ens.student_id = :studentId
-            AND rsem.is_active = 1
-            AND rsy.is_active = 1                                                               
+            WHERE ens.student_id = :studentId                                                             
         ";
 
         $stmt = $this->pdo->prepare($sql);
@@ -97,6 +95,9 @@
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
        
     }
+
+    // AND rsem.is_active = 1
+    // AND rsy.is_active = 1  
 
     protected function totalUnitByStudentPerSemester($id)
     {
@@ -192,13 +193,11 @@
         JOIN rgr_subjects rs 
             ON rs.id = ccs.subject_id
         WHERE es.student_id = :studentId
-          AND ccs.semester_id = :semesterId
     ";
 
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([
         ':studentId'  => $id,
-        ':semesterId' => $activeSemesterId
     ]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
