@@ -32,6 +32,7 @@ use App\Controllers\SemesterController;
 use App\Controllers\SubjectController;
 use App\Controllers\SubjectLoadingController;
 use App\Controllers\TeacherController;
+use App\Controllers\ReportController;
 
 use App\Controllers\TorController;
 use App\Helper\AiHelper;
@@ -329,6 +330,11 @@ $r->get('/grades/all',[GradeController::class,'allRegistrarGrades']);
 $r->get('/class-list',[ClassController::class,'index']);
 $r->get('/class-list/all',[ClassController::class,'allClassList']);
 $r->get('/class-list/{id:\d+}/schedule',[ClassController::class,'sectionScheduleAfterScheduleId']);
+
+
+// reports 
+
+$r->get('/reports',[ReportController::class,'index']);
 
 
 // academic records 
