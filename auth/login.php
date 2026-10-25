@@ -46,48 +46,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── Authentication ────────────────────────────────────────────────────────
     $stmt = $conn->prepare("
-        SELECT
-            user_account.user_id,
-            user_account.employee_id,
-            user_account.password,
-            sms_employee.role,
-            sms_employee.department,
-            sd_roles.role_name,
-            sd_department.department_name
-        FROM user_account
-        INNER JOIN sms_employee  ON sms_employee.employee_id  = user_account.employee_id
-        INNER JOIN sd_roles      ON sd_roles.role_id          = sms_employee.role
-        LEFT  JOIN sd_department ON sd_department.department_id = sms_employee.department
-        WHERE user_account.employee_id = :employeeid
-        AND   sms_employee.status      = 'active'
-        LIMIT 1
-    ");
-    $stmt->bindParam(':employeeid', $employeeid);
-    $stmt->execute();
+            SELECT
+                ua.user_id,
+                ua.employee_id,
+                ua.password,
+                e.first_name,
+                e.last_name,
+                e.role_id AS role,
+                e.department_id AS department,
+                e.unit_id,
+                e.employment_status,
+                r.role_name,
+                d.department_name,
+                u.unit_name
+            FROM user_account ua
+            INNER JOIN em_employees e
+                ON e.employee_id = ua.employee_id
+            LEFT JOIN em_roles r
+                ON r.role_id = e.role_id
+            LEFT JOIN em_departments d
+                ON d.department_id = e.department_id
+            LEFT JOIN em_units u
+                ON u.unit_id = e.unit_id
+            WHERE ua.employee_id = :employeeid
+            LIMIT 1
+        ");
 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([
+            ':employeeid' => $employeeid
+        ]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
         // ── Success: clear attempt tracking & build session ───────────────────
         unset($_SESSION[$key]);
 
+        session_regenerate_id(true);
+
         $_SESSION['employee_id']     = $user['employee_id'];
-        $_SESSION['role']            = $user['role'];
+        $_SESSION['employee_name']   = trim(
+            $user['first_name'] . ' ' . $user['last_name']
+        );
+        $_SESSION['role']            = (int) $user['role'];
         $_SESSION['role_name']       = $user['role_name'];
-        $_SESSION['department_id']   = $user['department'];        
-        $_SESSION['department_name'] = $user['department_name'];  
+        $_SESSION['department_id']   = $user['department'];
+        $_SESSION['department_name'] = $user['department_name'];
+        $_SESSION['unit_id']         = $user['unit_id'];
+        $_SESSION['unit_name']       = $user['unit_name'];
 
         $redirectMap = [
-        1 => 'modules/school-directress/index.php',
-        2 => 'modules/enrollment/index.php',
-        3 => 'modules/registrar/',
-        4 => 'modules/clinic/index.php',
-        5 => 'modules/library/index.php',
-        6 => 'modules/laboratory/',
-        7 => 'modules/monitoring/index.php',
-        8 => 'modules/guidance/index.php',
-        9 => 'modules/college-coor/index.php',
-        10 => 'modules/recruitment/index.php',
+        14 => 'modules/school-directress/index.php',
+        15 => 'modules/guidance/index.php',
+        16 => 'modules/registrar/',
+        17 => 'modules/enrollment/index.php',
+        18 => 'modules/monitoring/index.php',
+        19 => 'modules/clinic/index.php',
+        20 => 'modules/library/index.php',
+        21 => 'modules/laboratory/',
+        22 => 'modules/college-coor/index.php',
     ];
 
         $role = (int) $user['role'];
