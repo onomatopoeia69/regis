@@ -90,7 +90,7 @@
              <li><a href="<?php echo BASE_URL?>/enrollees-old" class="menu-link d-none <?php echo CURRENT_URI  === "enrollees-old" ? 'active' : '' ?>" id="EnrolleesOld">Enrollees (Old Students)</a></li>
              <li><a href="<?php echo BASE_URL?>/class-offering" class="menu-link d-none <?php echo str_contains(CURRENT_URI,'class-offering') ? 'active' : ''?>" id="Enrollees">Class Offering</a></li>
              <li><a href="<?php echo BASE_URL?>/section-schedule" class="menu-link <?php echo str_contains(CURRENT_URI,'section-schedule') ? 'active' : '' ?>" id="Enrollees">Section Schedule</a></li>
-             <li><a href="<?php echo BASE_URL?>/enrollment" class="menu-link <?php echo CURRENT_URI  === "enrollment" ? 'active' : '' ?>" id="Enrollment">Enrollment Records</a></li>
+             <li><a href="<?php echo BASE_URL?>/enrollment" class="menu-link d-none <?php echo CURRENT_URI  === "enrollment" ? 'active' : '' ?>" id="Enrollment">Enrollment Records</a></li>
              <li><a href="<?php echo BASE_URL?>/exam" class="menu-link <?php echo CURRENT_URI  === "exam" ? 'active' : '' ?>" id="Enrollees">Exam</a></li>
              <li><a href="<?php echo BASE_URL?>/academic-records" class="menu-link <?php echo CURRENT_URI  === "academic-records" ? 'active' : '' ?>" id="Enrollment">Academic Records</a></li>
              <li><a href="<?php echo BASE_URL?>/class-list" class="menu-link <?php echo CURRENT_URI  === "class-list" ? 'active' : '' ?>" id="Enrollment">Class List</a></li>
