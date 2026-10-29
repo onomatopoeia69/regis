@@ -14,8 +14,6 @@
   class CorController extends Controller
   {
 
-      
-
 
     public function generateCor($id)
     {
@@ -48,7 +46,6 @@
             'enrollments' => $enrollments,
             'school_image' => $bcp_logo,
             'ched_image' => $ched_logo,
-
             ]);
 
         $html = ob_get_clean();
