@@ -20,6 +20,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
+    // open the manage pre-requisite
+    document.getElementById('managePrerequisitesBtn')
+        .addEventListener('click', function () {
+
+            loadPrerequisiteSubjects(CurrId);
+
+            bootstrap.Modal.getOrCreateInstance(
+                document.getElementById('managePrerequisitesModal')
+            ).show();
+        });
+
+
+    // submit
+    document.getElementById('managePrerequisitesForm')
+    .addEventListener('submit', function (e) {
+
+        e.preventDefault();
+
+        const form = this;
+        const formData = new FormData(form);
+
+        fetch(`${BASE_URL}/curriculum/subjects/prerequisites/save`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.status === 'success') {
+
+                bootstrap.Modal.getInstance(
+                    document.getElementById('managePrerequisitesModal')
+                ).hide();
+
+                form.reset();
+
+                $('#targetCurriculumSubject').val(null).trigger('change');
+                $('#prerequisiteSelect').val(null).trigger('change');
+
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: 'success'
+                });
+
+            } else {
+
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message,
+                    icon: 'error'
+                });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+
+            Swal.fire({
+                title: 'Error!',
+                text: 'Unable to save prerequisites.',
+                icon: 'error'
+            });
+        });
+    });
+
      // modal for curriclum subject
     document.getElementById('addCurrBtn').addEventListener('click', function(){
         addCurrModal.show();
@@ -285,6 +350,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button class="btn btn-sm btn-danger del-btn" data-id="${subject.id}">
                                 Remove
                             </button>
+                            <td>
+                                ${
+                                    subject.prerequisites &&
+                                    subject.prerequisites !== 'None'
+                                        ? `<span class="badge bg-success">
+                                            <i class="bi bi-diagram-3 me-1"></i>
+                                            ${subject.prerequisites}
+                                        </span>`
+                                        : '<span class="text-muted">None</span>'
+                                }
+                            </td>
                         </td>
                     </tr>
                 `;
@@ -348,4 +424,70 @@ $(document).ready(function () {
         width: '100%',
         dropdownParent: $('#curriculumSubjectModal') 
     });
+
+        $('#targetCurriculumSubject').select2({
+        placeholder: 'Search subject...',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#managePrerequisitesModal')
+    });
+
+    $('#prerequisiteSelect').select2({
+        placeholder: 'Search prerequisite subjects...',
+        width: '100%',
+        closeOnSelect: false,
+        dropdownParent: $('#managePrerequisitesModal')
+    });
 });
+
+
+function loadPrerequisiteSubjects(curriculumId) {
+
+    fetch(`${BASE_URL}/curriculum/subjects/${curriculumId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then(data => {
+
+            const targetSelect = $('#targetCurriculumSubject');
+            const prerequisiteSelect = $('#prerequisiteSelect');
+
+            targetSelect.empty().append(
+                new Option('Choose subject...', '', true, false)
+            );
+
+            prerequisiteSelect.empty();
+
+            data.forEach(subject => {
+
+                const label =
+                    `${subject.subject_code} - ${subject.subject_name} ` +
+                    `(Year ${subject.year_level}, ${subject.semester})`;
+
+                targetSelect.append(
+                    new Option(label, subject.curriculum_subject_id)
+                );
+
+                prerequisiteSelect.append(
+                    new Option(label, subject.curriculum_subject_id)
+                );
+            });
+
+            targetSelect.trigger('change');
+            prerequisiteSelect.trigger('change');
+
+        })
+        .catch(error => {
+            console.error('Failed to load curriculum subjects:', error);
+
+            Swal.fire({
+                title: 'Error!',
+                text: 'Unable to load curriculum subjects.',
+                icon: 'error'
+            });
+        });
+}

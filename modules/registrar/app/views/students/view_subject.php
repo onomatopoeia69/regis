@@ -8,21 +8,47 @@
 
 <div class="container-fluid py-4">
     
-    
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4" >
-        <div id="dashboard-title">
-            <h3 class="fw-bold text-dark mb-1" ><?= $course['name'] ?> (<?= $course['code'] ?>)</h3>
-            <p class="text-muted mb-0">
-                Curriculum: <span class="fw-semibold text-secondary"><?= $curriculum['curriculum_name'] ?></span> &middot; Effective Year: <?= $curriculum['effective_year'] ?>
-            </p>
-        </div>
-        <div class="mt-3 mt-md-0">
-            <button class="btn btn-primary btn-sm px-4 py-2 fw-semibold d-flex align-items-center gap-2" id="addCurrBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                Add Subject
-            </button>
-        </div>
+    <div id="dashboard-title">
+        <h3 class="fw-bold text-dark mb-1">
+            <?= $course['name'] ?> (<?= $course['code'] ?>)
+        </h3>
+
+        <p class="text-muted mb-0">
+            Curriculum:
+            <span class="fw-semibold text-secondary">
+                <?= $curriculum['curriculum_name'] ?>
+            </span>
+            &middot;
+            Effective Year: <?= $curriculum['effective_year'] ?>
+        </p>
+    </div>
+
+    <div class="mt-3 mt-md-0 d-flex gap-2 flex-wrap">
+
+        <!-- Add Subject -->
+        <button
+            class="btn btn-primary btn-sm px-4 py-2 fw-semibold d-flex align-items-center gap-2"
+            id="addCurrBtn">
+
+            <i class="bi bi-plus-lg"></i>
+            Add Subject
+        </button>
+
+        <!-- Manage Prerequisites -->
+        <button
+            class="btn btn-success btn-sm px-4 py-2 fw-semibold d-flex align-items-center gap-2"
+            id="managePrerequisitesBtn">
+
+            <i class="bi bi-diagram-3"></i>
+            Manage Prerequisites
+        </button>
+
+    </div>
+
+</div>
+       
     </div>
 
     <!-- CURRICULUM WORKSPACE CARD -->
@@ -178,6 +204,110 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Manage Curriculum Prerequisites Modal -->
+<div class="modal fade" id="managePrerequisitesModal" tabindex="-1"
+     aria-labelledby="managePrerequisitesModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <!-- Header -->
+            <div class="modal-header bg-success text-white">
+                <div>
+                    <h5 class="modal-title fw-bold" id="managePrerequisitesModalLabel">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                        Manage Curriculum Prerequisites
+                    </h5>
+                    <small class="text-white-50">
+                        Set the required subjects that students must complete first.
+                    </small>
+                </div>
+
+                <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <form id="managePrerequisitesForm">
+
+                    <input type="hidden" name="curriculum_id"
+                           value="<?= htmlspecialchars($curriculum['id']) ?>">
+
+                    <!-- Target Subject -->
+                    <div class="mb-4">
+                        <label for="targetCurriculumSubject"
+                               class="form-label fw-semibold text-dark">
+                            Select Subject <span class="text-danger">*</span>
+                        </label>
+
+                        <select class="form-select" id="targetCurriculumSubject"
+                                name="curriculum_subject_id" required>
+                            <option value="">Choose subject...</option>
+                        </select>
+
+                        <div class="form-text">
+                            Select the subject that will have prerequisites.
+                        </div>
+                    </div>
+
+                    <div class="border rounded-3 p-3 bg-light mb-4">
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-arrow-down-circle text-success fs-5"></i>
+                            <h6 class="fw-bold mb-0">Required Prerequisite Subjects</h6>
+                        </div>
+
+                        <label for="prerequisiteSelect"
+                               class="form-label fw-semibold">
+                            Select Prerequisite(s)
+                        </label>
+
+                        <select class="form-select" id="prerequisiteSelect"
+                                name="prerequisite_subject_ids[]" multiple>
+                        </select>
+
+                        <div class="form-text">
+                            You can select multiple subjects. Students must complete
+                            these subjects before taking the selected subject.
+                        </div>
+                    </div>
+
+                    <!-- Information -->
+                    <div class="alert alert-info d-flex gap-2 align-items-start mb-0">
+                        <i class="bi bi-info-circle-fill mt-1"></i>
+                        <div>
+                            <strong>Reminder:</strong>
+                            Only subjects already added to this curriculum can be
+                            selected as prerequisites.
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-light border px-4"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="submit" form="managePrerequisitesForm"
+                        class="btn btn-success px-4 fw-semibold">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Save Prerequisites
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 
 

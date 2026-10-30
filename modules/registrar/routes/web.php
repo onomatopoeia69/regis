@@ -253,6 +253,8 @@ use App\Models\Semester;
 
 
 
+
+
 // curriculum subject 
 
    $r->get('/curriculum/{id:\d+}/subject',[CurriculumSubjectController::class,'index']);
@@ -261,6 +263,9 @@ use App\Models\Semester;
    $r->post('/curriculum-subject/delete',[CurriculumSubjectController::class,'destroy']);
    $r->get('/curriculum-subject/{id:\d+}',[CurriculumSubjectController::class,'show']);
    $r->get('/curriculum-subject/{id:\d+}/pdf',[CurriculumSubjectController::class,'curriculumPDF']);
+
+   $r->get('/curriculum/subjects/{id:\d+}',[CurriculumSubjectController::class,'getAllCurriculumSubjects']);
+   $r->post('/curriculum/subjects/prerequisites/save',[CurriculumSubjectController::class, 'savePrerequisites']);
    
 
 // notifications 

@@ -13,6 +13,8 @@
  use App\Models\Semester;
  use App\Models\Subject;
  use Dompdf\Dompdf;
+ use Exception;
+ use Throwable;
 
  class CurriculumSubjectController extends Controller
  {
@@ -56,6 +58,12 @@ public function allCurriculumSubject($id)
         }
 
         Response::json($grouped);
+    }
+
+    public function getAllCurriculumSubjects($id)
+    {
+        $curriculum_subject = CurriculumSubject::getAllCurriculumSubjects($id);
+        Response::json($curriculum_subject);
     }
 
 
@@ -167,6 +175,45 @@ public function allCurriculumSubject($id)
         ]);
 
       }
+
+
+      public function savePrerequisites()
+{
+    header('Content-Type: application/json');
+
+    try {
+
+        $curriculum_subject_id = $_POST['curriculum_subject_id'] ?? '';
+        $prerequisite_ids = $_POST['prerequisite_subject_ids'] ?? [];
+
+        if (empty($curriculum_subject_id)) {
+            throw new Exception('Please select a subject.');
+        }
+
+        if (!is_array($prerequisite_ids)) {
+            throw new Exception('Invalid prerequisite selection.');
+        }
+
+        CurriculumSubject::savePrerequisites(
+            $curriculum_subject_id,
+            $prerequisite_ids
+        );
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Prerequisites saved successfully.'
+        ]);
+
+    } catch (Throwable $e) {
+
+        http_response_code(400);
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ]);
+    }
+    }           
 
 
       public function curriculumPDF(int $id)
