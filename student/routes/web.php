@@ -10,6 +10,7 @@ use App\Controllers\InstructorController;
 use App\Controllers\NotificationController;
 use App\Controllers\StudentController;
 use App\Controllers\ScholarshipController;
+use App\Controllers\SelfEnrollmentController;
 use App\Helper\Response;
 use App\Models\SchoolYear;
 
@@ -282,6 +283,39 @@ $r->addRoute('GET', '/pdf/{id:\d+}/cor', [
     'uses' => [ScholarshipController::class, 'applyScholarship']
     ]);
 
+
+    /**
+     * ================================================================
+     *  Scholarship Controller
+     * ---------------------------------------------------------------
+     * File      : ScholarshipController.php
+     * Module    : Scholarship
+     * Protected by : Auth
+     * ================================================================
+     */
+
+
+
+   $r->addRoute('GET', '/self-enrollment', [
+        'middleware' => ['auth'],
+        'uses' => [SelfEnrollmentController::class, 'index']
+    ]);
+
+
+    $r->addRoute('POST', '/self-enrollment/upload', [
+        'middleware' => ['auth'],
+        'uses' => [SelfEnrollmentController::class, 'upload']
+    ]);
+
+     $r->addRoute('POST', '/self-enrollment/delete', [
+        'middleware' => ['auth'],
+        'uses' => [SelfEnrollmentController::class, 'delete']
+    ]);
+
+       $r->addRoute('GET', '/self-enrollment/view/{id:\d+}', [
+        'middleware' => ['auth'],
+        'uses' => [SelfEnrollmentController::class, 'view']
+    ]);
 
 
 
