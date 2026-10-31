@@ -34,6 +34,8 @@
       JOIN cc_sections ccsec ON ccsec.id = ccfl.section_id
       JOIN enr_students es ON es.student_id = een.student_id
       WHERE es.student_id = :studentId
+      AND rsem.is_active = 1
+      
       ";
 
       $stmt = $this->pdo->prepare($sql);

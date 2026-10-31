@@ -86,7 +86,9 @@
             JOIN cc_room ccr ON ccr.id = ccs.room_id
             JOIN cc_faculty_load ccfl ON ccfl.id = ccs.faculty_load_id
             JOIN cc_faculty ccf ON ccf.id = ccfl.faculty_id
-            WHERE ens.student_id = :studentId                                                             
+            WHERE ens.student_id = :studentId  
+            AND rsy.is_active = 1 
+            AND rsem.is_active = 1                                                           
         ";
 
         $stmt = $this->pdo->prepare($sql);
@@ -200,9 +202,11 @@
             ON rs.id = ccs.subject_id
         JOIN rgr_semesters rsem
             ON rsem.id = ccs.semester_id
-        JOIN rgr_school_years rsy 
+        JOIN rgr_school_years rsy
             ON rsy.id = ccs.school_year_id
         WHERE es.student_id = :studentId
+        AND rsem.is_active = 1
+        AND rsy.is_active = 1
     ";
 
     $stmt = $this->pdo->prepare($sql);
