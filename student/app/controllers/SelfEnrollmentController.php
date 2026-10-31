@@ -162,26 +162,14 @@ public function upload(): void
   
 public function view(int $id): void
 {
-    $userId = (int) Session::get('student_user_id');
-    $studentData = SelfEnrollment::getStudentData($userId);
-
-    if (!$studentData) {
-        Response::redirect('/login');
-        return;
-    }
-
-    $file = SelfEnrollment::getUploadFile(
-        (int) $studentData['student_id'],
-        $id
-    );
+   
+    $file = SelfEnrollment::getUploadFile($id);
 
     if (!$file) {
         http_response_code(404);
         echo 'File not found or has been archived.';
         return;
     }
-
-
 
     $filePath = $file['file_data'];
 

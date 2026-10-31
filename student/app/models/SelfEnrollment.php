@@ -155,18 +155,16 @@ class SelfEnrollment
     /**
      * Kunin ang file — hindi kasama ang archived.
      */
-    public static function getUploadFile(int $studentId, int $uploadId): array|false
+    public static function getUploadFile(int $uploadId): array|false
     {
         $pdo = Database::connect();
         $statement = $pdo->prepare("SELECT id, file_data, file_name, file_mime
             FROM enr_payment_submissions
             WHERE id = :id
-              AND student_id = :student_id
               AND deleted_at IS NULL
             LIMIT 1");
         $statement->execute([
             'id'         => $uploadId,
-            'student_id' => $studentId,
         ]);
 
         return $statement->fetch(PDO::FETCH_ASSOC);

@@ -17,7 +17,7 @@
       <div class="card shadow-sm">
 
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="fs-6 mb-0 text-primary">Curriculum List</h3>
+            <h3 class="fs-6 mb-0 text-primary">Enrollment List</h3>
 
             <div class="d-flex gap-2">
 
@@ -59,6 +59,16 @@
                     </select>
                 </div>
 
+                <div class="col-md-2">
+                        <label class="form-label small">Status</label>
+                        <select class="form-select form-select-sm" id="status">
+                            <option value="">All Status</option>
+                            <option value="verified">Verified</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>      
+
                 <div class="col-md-5">
                     <label class="form-label small">Search</label>
                     <input type="text"
@@ -85,10 +95,11 @@
                             <th width="40">
                                 <input type="checkbox" id="select-all">
                             </th>
-                            <th>Curriculum Name</th>   
-                            <th>Course Name</th>
-                            <th>Effective Year</th>
-                            <th>Status</th>
+                            <th>Student Name</th>   
+                            <th>Course</th>
+                            <th>School Year</th>
+                            <th>Year</th>
+                            <th>Semester</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -123,174 +134,139 @@
 </main>
 
 
- <!-- show course modal -->
-<div class="modal fade" id="showScheduleDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+<!-- Payment Verification Modal -->
+<div class="modal fade" id="paymentVerificationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
 
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content shadow-lg border-0 rounded-3">
-
-           
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <div>
-                    <h5 class="modal-title mb-0" id="showModalTitle">
-                        Class Details
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-receipt me-2"></i>
+                        Payment Verification
                     </h5>
-                    <small class="opacity-75">View class and schedule information</small>
+                    <small class="text-muted">Review student payment submission</small>
                 </div>
-
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <!-- BODY -->
-            <div class="modal-body p-4">
+            <div class="modal-body">
 
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Payment Status</span>
+                    <span class="badge bg-warning-subtle text-warning-emphasis"
+                        id="paymentStatus">Pending</span>
+                </div>
 
-            <!-- COURSE SECTION -->
-                <div class="mb-4">
-                    <h6 class="text-muted text-uppercase small mb-2">Course Information</h6>
+                <!-- Student Information -->
+                <h6 class="fw-bold mb-3">Student Information</h6>
 
-                    <div class="p-3 bg-light rounded">
-                        
-                        <div class="row mb-2">
-                           
-                            <div class="col-md-6 mb-2 mb-md-0">
-                                <small class="text-muted">Course Code</small>
-                                <div class="fw-semibold" id="show_course_code">—</div>
-                            </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <small class="text-muted">Student Name</small>
+                        <div class="fw-semibold" id="paymentStudentName">-</div>
+                    </div>
 
-                            <div class="col-md-6">
-                                <small class="text-muted">Course Name</small>
-                                <div class="fw-semibold" id="show_course_name">—</div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <small class="text-muted">Student Number</small>
+                        <div class="fw-semibold" id="paymentStudentNumber">-</div>
+                    </div>
 
-                          <div class="row mb-1">
-                           
-                            <div class="col-md-6 mb-2 mb-md-0">
-                                <small class="text-muted">Section</small>
-                                <div class="fw-semibold" id="show_section_name">—</div>
-                            </div>
+                    <div class="col-md-6">
+                        <small class="text-muted">Course</small>
+                        <div class="fw-semibold" id="paymentCourse">-</div>
+                    </div>
 
-                            <div class="col-md-6">
-                                <small class="text-muted">Year Level</small>
-                                <div class="fw-semibold" id="show_year_level">—</div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <small class="text-muted">Year Level</small>
+                        <div class="fw-semibold" id="paymentYearLevel">-</div>
+                    </div>
 
+                    <div class="col-md-6">
+                        <small class="text-muted">School Year</small>
+                        <div class="fw-semibold" id="paymentSchoolYear">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Semester</small>
+                        <div class="fw-semibold" id="paymentSemester">-</div>
                     </div>
                 </div>
 
+                <hr>
 
-                <!-- CURRICULUM SECTION -->
-                <div>
-                    <h6 class="text-muted text-uppercase small mb-2">Subject Information</h6>
+                <!-- Submission Information -->
+                <h6 class="fw-bold mb-3">Payment Submission</h6>
 
-                    <div class="p-3 border rounded">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <small class="text-muted">Submission ID</small>
+                        <div class="fw-semibold" id="paymentSubmissionId">-</div>
+                    </div>
 
-                        <div class="row mb-2">
-                           
-                            <div class="col-md-6 mb-2 mb-md-0">
-                                <small class="text-muted">Subject Code</small>
-                                <div class="fw-semibold" id="show_subject_code">—</div>
-                            </div>
+                    <div class="col-md-6">
+                        <small class="text-muted">Date Submitted</small>
+                        <div class="fw-semibold" id="paymentSubmittedAt">-</div>
+                    </div>
 
-                            <div class="col-md-6">
-                                <small class="text-muted">Subject Name</small>
-                                <div class="fw-semibold" id="show_subject_name">—</div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                           
-                            <div class="col-md-6 mb-2 mb-md-0">
-                                <small class="text-muted">Semester</small>
-                                <div class="fw-semibold" id="show_semester">—</div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <small class="text-muted">Teacher</small>
-                                <div class="fw-semibold" id="show_teacher_name">—</div>
-                            </div>
-                        </div>
-
-                         <div class="row mb-2">
-                           
-                            <div class="col-md-4 mb-2 mb-md-0">
-                                <small class="text-muted">Units</small>
-                                <div class="fw-semibold" id="show_units">—</div>
-                            </div>
-
-                              <div class="col-md-4">
-                                <small class="text-muted">Lecture Hours</small>
-                                <div class="fw-semibold" id="show_lecture_hours">—</div>
-                            </div>
-
-                              <div class="col-md-4">
-                                <small class="text-muted">Laboratory Hours</small>
-                                <div class="fw-semibold" id="show_laboratory_hours">—</div>
-                            </div>
-                        </div>
-
+                    <div class="col-12">
+                        <small class="text-muted">File Name</small>
+                        <div class="fw-semibold" id="paymentFileName">-</div>
                     </div>
                 </div>
 
+                <hr>
 
+                <!-- Receipt Preview -->
+                <h6 class="fw-bold mb-3">Uploaded Payment Receipt</h6>
 
-                 <!-- CURRICULUM SECTION -->
-                <div>
-                    <h6 class="text-muted text-uppercase small mt-4">Class and Schedule Information</h6>
+                <div class="border rounded p-2 text-center bg-body-tertiary">
+                    <img id="paymentReceiptPreview"
+                        class="img-fluid rounded d-none"
+                        style="max-height: 400px;"
+                        alt="Payment receipt">
 
-                    <div class="p-3 border rounded">
-
-
-                         <div class="row mb-2">
-                           
-                            <div class="col-md-4 mb-2 mb-md-0">
-                                <small class="text-muted">Room</small>
-                                <div class="fw-semibold" id="show_room">—</div>
-                            </div>
-
-                              <div class="col-md-4">
-                                <small class="text-muted">Room Type</small>
-                                <div class="fw-semibold" id="show_room_type">—</div>
-                            </div>
-
-                              <div class="col-md-4">
-                                <small class="text-muted">Building</small>
-                                <div class="fw-semibold" id="show_building">—</div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-2">
-                           
-                            <div class="col-md-4 mb-2 mb-md-0">
-                                <small class="text-muted">Day</small>
-                                <div class="fw-semibold" id="show_day">—</div>
-                            </div>                          
-
-                            <div class="col-md-4">
-                                <small class="text-muted ">Start Time</small>
-                                <div class="fw-semibold" id="show_start_time">—</div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <small class="text-muted">End Time</small>
-                                <div class="fw-semibold" id="show_end_time">—</div>
-                            </div>
-                        </div>
+                    <div id="paymentReceiptPlaceholder" class="py-5 text-muted">
+                        <i class="bi bi-file-earmark-image fs-1"></i>
+                        <p class="mb-0">Receipt preview unavailable</p>
                     </div>
                 </div>
 
-            </div>
-
-            <div class="modal-footer d-flex justify-content-between">
-                  
-                  <a href='#' id="class_offer_card" class="btn btn-primary" style="cursor:pointer;">
-                     Go to Class Offering
+                <a href="#" id="paymentReceiptLink"
+                    target="_blank"
+                    class="btn btn-sm btn-outline-primary mt-2 d-none">
+                    <i class="bi bi-eye me-1"></i> View Full Receipt
                 </a>
 
-                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <hr>
+
+                <!-- Remarks -->
+                <div class="mb-2">
+                    <label class="form-label fw-semibold">
+                        Verification Remarks
+                    </label>
+                    <textarea id="paymentRemarks"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Enter remarks..."></textarea>
+                </div>
+
+                <input type="hidden" id="paymentSubmissionIdInput">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light"
+                    data-bs-dismiss="modal">
                     Close
+                </button>
+
+                <button type="button" class="btn btn-danger" id="rejectPaymentBtn">
+                    <i class="bi bi-x-circle me-1"></i> Reject
+                </button>
+
+                <button type="button" class="btn btn-success" id="verifyPaymentBtn">
+                    <i class="bi bi-check-circle me-1"></i> Verify Payment
                 </button>
             </div>
 
@@ -299,9 +275,15 @@
 </div>
 
 
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script> const STUDENT_BASE_URL = "<?php echo STUDENT_BASE_URL ?>"</script>
 <script> const BASE_URL = "<?php echo BASE_URL ?>" </script>
-<script src="<?= BASE_URL ?>/js/section_schedule.js"></script>
+<script src="<?= BASE_URL ?>/js/enrollment.js"></script>
 
 <?php include  __DIR__ .'/../partials/footer.php'; ?> 

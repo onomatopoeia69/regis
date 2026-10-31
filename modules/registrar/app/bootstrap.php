@@ -8,6 +8,10 @@ use App\Core\Database;
 
 $isCli = php_sapi_name() === 'cli';
 
+define('STUDENT_BASE_URL', $isCli ? '' :
+    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://')
+    . $_SERVER['HTTP_HOST'] . '/regis/student'
+);
 
 define('CURRENT_URI',$isCli ? '' : basename($_SERVER['REQUEST_URI']));
 define('BASE_PATH', dirname(__DIR__));

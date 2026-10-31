@@ -312,10 +312,7 @@ $r->addRoute('GET', '/pdf/{id:\d+}/cor', [
         'uses' => [SelfEnrollmentController::class, 'delete']
     ]);
 
-       $r->addRoute('GET', '/self-enrollment/view/{id:\d+}', [
-        'middleware' => ['auth'],
-        'uses' => [SelfEnrollmentController::class, 'view']
-    ]);
+    $r->addRoute('GET','/self-enrollment/view/{id:\d+}',[SelfEnrollmentController::class, 'view']);
 
 
 

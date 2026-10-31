@@ -278,6 +278,11 @@ use App\Models\Semester;
 // enrollment information
 
  $r->get('/enrollment',[EnrollmentController::class,'index']);
+ $r->get('/enrollment/info',[EnrollmentController::class,'allEnrollmentInfo']);
+ $r->get('/enrollment/view/{id:\d+}',[EnrollmentController::class, 'viewEnrollmentInfo']);
+ $r->post('/enrollment/approve/{id:\d+}', [ EnrollmentController::class,'approve']);
+ $r->post('/enrollment/reject/{id:\d+}', [EnrollmentController::class,'reject']);
+
  
  $r->get('/enrollment/{id:\d+}/schedule',[EnrollmentController::class,'allEnrolledStudentsInSchedule']);
 
