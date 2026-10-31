@@ -81,6 +81,9 @@
             <li><a href="<?php echo BASE_URL ?>/enrollment" class="menu-link d-flex justify-content-between align-items-center text-decoration-none text-white" id="dashboard" style="margin-left: 8px;">Enrollment</a></li>
         </ul>
         <ul>
+            <li><a href="<?php echo BASE_URL ?>/self-enrollment" class="menu-link d-flex justify-content-between align-items-center text-decoration-none text-white" id="dashboard" style="margin-left: 8px;">Self-Enrollment</a></li>
+        </ul>
+        <ul>
             <li><a href="<?php echo BASE_URL ?>/events" class="menu-link d-flex justify-content-between align-items-center text-decoration-none text-white" id="dashboard" style="margin-left: 8px;">Events</a></li>
         </ul>
 

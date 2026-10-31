@@ -6,6 +6,7 @@
  use App\Helper\Response;
  use App\Models\Employee;
  use App\Models\Enrollment;
+ use App\Models\EnrollmentNotification;
  use App\Models\SchoolYear;
  use App\Models\Semester;
 
@@ -74,6 +75,13 @@
         return;
     }
 
+     EnrollmentNotification::create([
+            'title' => 'Payment Approval',
+            'message' => 'The submitted payment has been successfully reviewed and approved.',
+            'type' => 'payment',
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+
     Response::json([
         'success' => true,
         'message' => 'Payment successfully approved.'
@@ -116,6 +124,13 @@
         ], 400);
         return;
     }
+
+     EnrollmentNotification::create([
+            'title' => 'Payment Rejected',
+            'message' => 'The payment has been rejected. The applicant must review the remarks and submit the corrected document.',
+            'type' => 'enrollment',
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
 
     Response::json([
         'success' => true,

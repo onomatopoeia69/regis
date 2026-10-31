@@ -9,6 +9,7 @@ use App\Controllers\CourseController;
 use App\Controllers\CurriculumSubjectController;
 use App\Controllers\DocumentController;
 use App\Controllers\DocumentRequestController;
+use App\Controllers\DocumentRequirementsController;
 use App\Controllers\EnrolleeController;
 use App\Controllers\EnrollmentController;
 use App\Controllers\ExamController;
@@ -330,6 +331,13 @@ $r->get('/exam-schedule/pdf',[ExaminationScheduleController::class,'examSchedule
 $r->get('/grades',[GradeController::class,'index']);
 $r->get('/grades/all',[GradeController::class,'allRegistrarGrades']);
 
+// document requirements
+
+$r->get('/requirements',[DocumentRequirementsController::class,'index']);
+$r->get('/requirements/all',[DocumentRequirementsController::class,'allStudentRequirements']);
+$r->get('/requirements/view/{id:\d+}',[DocumentRequirementsController::class,'getStudentRequirementById']);
+$r->post('/requirements/approve/{id:\d+}', [DocumentRequirementsController::class,'approveRequirement']);
+$r->post('/requirements/reject/{id:\d+}', [DocumentRequirementsController::class,'rejectRequirement']);
 
 
 
