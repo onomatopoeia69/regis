@@ -11,7 +11,7 @@
    {
      
        public $tableName = 'enr_student_requirements';
-       public $primaryKey = 'student_requirement_id';
+       public $primaryKey = 'id';
 
 
        protected function getAllDocumentAlsoSubmitted(int $id)
@@ -25,7 +25,7 @@
                   r.requirement_category,
                   r.is_mandatory,
 
-                  sr.student_requirement_id,
+                  sr.id,
                   sr.is_submitted,
                   sr.submitted_date,
                   sr.notes
@@ -66,7 +66,7 @@
    {
     $sql = "SELECT 
                 es.student_id,
-                esr.student_requirement_id,
+                esr.id,
                 esr.is_submitted,
                 esr.submitted_date,
                 esr.notes,
