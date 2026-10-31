@@ -34,10 +34,16 @@
         return []; 
     }
 
-    $sql = "
+   $sql = "
         SELECT 
+            es.enrolled_at AS registration_date,
+            es.student_number AS student_number,
+            es.year_level AS year_level,
             ea.surname AS student_last_name,
             ea.first_name AS student_first_name,
+            ea.middle_name AS student_middle_name,
+            rsem.name AS semester_name,
+            rsy.name AS school_year_name,
             rc.name AS course_name,
             ccs.start_time,
             ccs.end_time,
@@ -63,15 +69,17 @@
         JOIN cc_faculty ccfac 
             ON ccfac.id = ccf.faculty_id
         JOIN rgr_subjects rs 
-            ON rs.id = ccs.subject_id 
+            ON rs.id = ccs.subject_id
+        JOIN rgr_semesters rsem
+            ON rsem.id = ccs.semester_id
+        JOIN rgr_school_years rsy 
+            ON rsy.id = ccs.school_year_id
         WHERE es.student_id = :studentId
-          AND ccs.semester_id = :semesterId
     ";
 
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([
         ':studentId'  => $id,
-        ':semesterId' => $activeSemesterId
     ]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
