@@ -36,6 +36,7 @@ use App\Controllers\TeacherController;
 use App\Controllers\ReportController;
 
 use App\Controllers\TorController;
+use App\Controllers\TransfereeController;
 use App\Helper\AiHelper;
 use App\Helper\Response;
 use App\Models\SchoolYear;
@@ -359,6 +360,18 @@ $r->get('/reports',[ReportController::class,'index']);
 
 $r->get('/academic-records',[AcademicRecordsController::class,'index']);
 $r->get('/students/view/{id:\d+}/academic-records',[AcademicRecordsController::class,'show']);
+
+
+
+// transferee evaluation 
+
+$r->get('/transferee-application',[TransfereeController::class,'index']);
+$r->get('/transferee-application/all',[TransfereeController::class,'getApplications']);
+
+$r->get('/transferee/evaluation/{id:\d+}',[TransfereeController::class,'evaluation']);
+$r->post('/transferee/evaluation/store',[TransfereeController::class,'store']);
+
+
 
 
 // for all 

@@ -1,28 +1,30 @@
-<?php include __DIR__ .'/../partials/sidebar.php'; ?>
-<?php include  __DIR__ .'/../partials/header.php'; ?>
+<?php include __DIR__ . '/../partials/sidebar.php'; ?>
+<?php include __DIR__ . '/../partials/header.php'; ?>
 
 <main class="main-content">
 <div class="container">
 
+    <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-    
-        <div id="dashboard-title">
-            <h1 class="h3 fw-bold mb-0">Course Management</h1>
-             <p class="text-muted small">Manage and organize academic programs for the registrar.</p>
-        </div>
-        
 
-        <button class="btn btn-primary btn-sm" id="addCourse">
-            <i class="bi bi-plus-lg"></i> Add Course
-        </button>
+        <div id="dashboard-title">
+            <h1 class="h3 fw-bold mb-0">Transferee Evaluation</h1>
+            <p class="text-muted small">
+                Evaluate transferee academic records and credit equivalent curriculum subjects.
+            </p>
+        </div>
 
     </div>
 
 
+    <!-- Transferees List -->
     <div class="card shadow-sm">
 
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="fs-6 mb-0 text-primary">Courses List</h3>
+
+            <h3 class="fs-6 mb-0 text-primary">
+                Transferees List
+            </h3>
 
             <div class="d-flex gap-2">
 
@@ -39,15 +41,18 @@
                 </button>
 
             </div>
+
         </div>
 
 
         <div class="card-body">
 
+            <!-- Table Filters -->
             <div class="row g-2 mb-3">
 
                 <div class="col-md-2">
                     <label class="form-label small">Per Page</label>
+
                     <select class="form-select form-select-sm" id="limit">
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -58,46 +63,54 @@
 
                 <div class="col-md-3">
                     <label class="form-label small">Order</label>
+
                     <select class="form-select form-select-sm" id="order">
-                        <option value="desc">Descending (Z-A)</option>
-                        <option value="asc">Ascending (A-Z)</option>
+                        <option value="desc">Descending (Newest)</option>
+                        <option value="asc">Ascending (Oldest)</option>
                     </select>
                 </div>
 
-                <div class="col-md-5">
-                    <label class="form-label small">Search</label>
-                    <input type="text"
-                        class="form-control form-control-sm"
-                        placeholder="Search course..."
-                        id="search">
+                <div class="col-md-3">
+                    <label class="form-label small">Evaluation Status</label>
+
+                    <select class="form-select form-select-sm" id="status">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                    </select>
                 </div>
 
-                <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-danger btn-sm d-none w-100" id="delete-btn">
-                        <i class="bi bi-trash"></i> Delete
-                    </button>
+                <div class="col-md-4">
+                    <label class="form-label small">Search</label>
+
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           placeholder="Search student..."
+                           id="search">
                 </div>
 
             </div>
 
 
+            <!-- Table -->
             <div class="table-responsive">
 
                 <table class="table table-hover table-striped align-middle">
 
                     <thead class="table-light">
                         <tr>
-                            <th width="40">
-                                <input type="checkbox" id="select-all">
-                            </th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Year</th>
+                            <th width="40">#</th>
+                            <th>Student No.</th>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>TOR</th>
+                            <th>Evaluation</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
 
-                    <tbody id="studentsTableBody">
+                    <tbody id="transfereesTableBody">
                     </tbody>
 
                 </table>
@@ -105,7 +118,7 @@
             </div>
 
 
-            
+            <!-- Pagination -->
             <div class="d-flex align-items-center justify-content-between mt-3">
 
                 <div class="fw-semibold small" id="pageInfo"></div>
@@ -121,239 +134,439 @@
 </div>
 </main>
 
- <!-- add course modal -->
 
-<div class="modal fade" id="addCourseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-md">
+<!-- TRANSFEREE EVALUATION MODAL -->
+
+<div class="modal fade"
+     id="evaluationModal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
         <div class="modal-content shadow-sm">
 
             <!-- Header -->
             <div class="modal-header">
-                <h5 class="modal-title fw-semibold">
-                    Add Course
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeBtn"></button>
+
+                <div>
+                    <h5 class="modal-title fw-semibold">
+                        Transferee Academic Evaluation
+                    </h5>
+
+                    <div class="small text-muted" id="evaluationStudentName">
+                        Student Information
+                    </div>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        id="closeEvaluationBtn">
+                </button>
+
             </div>
+
 
             <!-- Body -->
             <div class="modal-body">
 
-                <form class="row g-3" id="courseForm" action="<?php echo BASE_URL ?>/course/store" method="POST">
+                <div class="row g-3">
 
-                    <!-- AI Auto Correct -->
-                    <div class="col-12 d-flex justify-content-between align-items-center border rounded p-2 px-3 bg-light">
-
-                        <div>
-                            <span class="fw-semibold">AI Auto-Correct</span>
-                            <i class="bi bi-info-circle text-muted"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="right"
-                               title="When enabled, AI automatically corrects grammar, spelling, and capitalization.">
-                            </i>
-                            <div class="small text-muted">
-                                Improve text automatically before saving.
-                            </div>
-                        </div>
-
-                        <div class="form-check form-switch m-0">
-                            <input type="hidden" name="ai_auto_correct" value="0">
-
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   id="aiAutoCorrect"
-                                   name="ai_auto_correct"
-                                   value="1">
-                        </div>
-
-                    </div>
-
-                    <!-- Course Code -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            Course Code
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control ai-clean"
-                            name="course_code"
-                            id="course_code"
-                            placeholder="e.g. BSIS, BSHM">
-
-                        <div class="invalid-feedback" id="error-course_code"></div>
-                    </div>
-
-                    <!-- Course Years -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            Course Years
-                        </label>
-
-                        <select class="form-select" name="course_year">
-                            <option value="1">1 Year</option>
-                            <option value="2">2 Years</option>
-                            <option value="3">3 Years</option>
-                            <option value="4">4 Years</option>
-                            <option value="5">5 Years</option>
-                        </select>
-                    </div>
-
-                    <!-- Course Name -->
+                    <!-- STUDENT INFORMATION -->
                     <div class="col-12">
-                        <label class="form-label fw-semibold">
-                            Course Name
-                        </label>
 
-                        <input
-                            type="text"
-                            class="form-control ai-clean"
-                            name="course_name"
-                            id="course_name"
-                            placeholder="e.g. Bachelor of Science in Information Systems">
+                        <div class="border rounded p-3 bg-light">
 
-                        <div class="invalid-feedback" id="error-course_name"></div>
+                            <div class="row g-3">
+
+                                <div class="col-md-3">
+                                    <div class="small text-muted">Student Number</div>
+                                    <div class="fw-semibold" id="student_number">-</div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="small text-muted">Student Name</div>
+                                    <div class="fw-semibold" id="student_name">-</div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="small text-muted">Course</div>
+                                    <div class="fw-semibold" id="student_course">-</div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="small text-muted">Year Level</div>
+                                    <div class="fw-semibold" id="student_year">-</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                     <!-- Course Name -->
 
-                                    <div class="col-12">
-                    <label for="course_name" class="form-label fw-semibold">
-                        Course Description
-                    </label>
+                    <!-- TOR PREVIEW -->
+                    <div class="col-lg-5">
 
-                    <textarea
-                        class="form-control ai-clean"
-                        name="course_description"
-                        id="course_description"
-                        placeholder="e.g. Bachelor of Science in Information Systems"
-                        rows="3"
-                    ></textarea>
+                        <div class="border rounded h-100">
 
-                    <div class="invalid-feedback" id="error-course_description"></div>
+                            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+
+                                <div>
+                                    <h6 class="fw-semibold mb-0">
+                                        <i class="bi bi-file-earmark-pdf text-danger"></i>
+                                        Transcript of Records
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Previous School Document
+                                    </small>
+                                </div>
+
+                                <a href="#"
+                                   target="_blank"
+                                   class="btn btn-outline-primary btn-sm"
+                                   id="openTor">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                    Open
+                                </a>
+
+                            </div>
+
+                            <div class="p-2">
+
+                                <iframe
+                                    id="torPreview"
+                                    src=""
+                                    width="100%"
+                                    height="600"
+                                    class="border rounded">
+                                </iframe>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBJECT EVALUATION -->
+                    <div class="col-lg-7">
+
+                        <div class="border rounded">
+
+                            <div class="p-3 border-bottom">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <h6 class="fw-semibold mb-0">
+                                            Subject Evaluation
+                                        </h6>
+
+                                        <small class="text-muted">
+                                            Match previous subjects with your curriculum.
+                                        </small>
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn btn-primary btn-sm"
+                                            id="addEvaluation">
+                                        <i class="bi bi-plus-lg"></i>
+                                        Add Subject
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Evaluation Table -->
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-striped align-middle mb-0">
+
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Previous Subject</th>
+                                            <th>Equivalent Subject</th>
+                                            <th>Grade</th>
+                                            <th>Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="evaluationTableBody">
+
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                No subjects evaluated yet.
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EVALUATION SUMMARY -->
+                        <div class="border rounded p-3 mt-3">
+
+                            <h6 class="fw-semibold mb-3">
+                                Evaluation Summary
+                            </h6>
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Total Evaluated</div>
+                                    <h5 class="fw-bold mb-0" id="totalEvaluated">0</h5>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Approved / Credited</div>
+                                    <h5 class="fw-bold text-success mb-0" id="totalApproved">0</h5>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Pending</div>
+                                    <h5 class="fw-bold text-warning mb-0" id="totalPending">0</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                </form>
-
             </div>
+
 
             <!-- Footer -->
             <div class="modal-footer">
 
                 <button type="button"
-                        class="btn btn-primary px-4"
-                        id="addCourseSubmit">
-                    Submit
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Close
                 </button>
 
             </div>
 
         </div>
+
     </div>
+
 </div>
 
- <!-- edit course modal -->
 
-<div class="modal fade" id="editCourseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-     <div class="modal-dialog modal-md">
+<!-- ADD SUBJECT EVALUATION MODAL -->
+
+<div class="modal fade"
+     id="addEvaluationModal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-md">
+
         <div class="modal-content shadow-sm">
 
-
-        <!-- Header -->
+            <!-- Header -->
             <div class="modal-header">
+
                 <h5 class="modal-title fw-semibold">
-                    Edit Course
+                    Evaluate Previous Subject
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="editCloseBtn"></button>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
             </div>
 
-        
-        <div class="modal-body">
-            
-     <form class="row g-3" id="editCourseForm" method="POST">
 
-        <div class="col-md-6">
-            <label for="inputEmail4" class="form-label">Course Code</label>
-            <input type="text" class="form-control" name="edit_course_code" id="edit_course_code" >
-            <div class="invalid-feedback" id="error-edit_course_code"></div>
-        </div>
-        <div class="col-md-6">
-            <label for="inputPassword4" class="form-label">Course Years</label>
-             <select class="form-select col-2" name="edit_course_year" id="edit_course_year">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+            <!-- Body -->
+            <div class="modal-body">
+
+                <form class="row g-3"
+                      id="evaluationForm"
+                      action="<?php echo BASE_URL ?>/transferees/evaluation/store"
+                      method="POST">
+
+                    <input type="hidden"
+                           name="student_id"
+                           id="evaluation_student_id">
+
+                    <input type="hidden"
+                           name="requirement_file_id"
+                           id="requirement_file_id">
+
+
+                    <!-- PREVIOUS SCHOOL SUBJECT -->
+                    <div class="col-12">
+
+                        <h6 class="text-primary fw-semibold">
+                            Previous School Subject
+                        </h6>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Subject Code
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="previous_subject_code"
+                               placeholder="e.g. IT101">
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Subject Grade
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="previous_grade"
+                               placeholder="e.g. 1.75 or 88"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+                            Subject Name
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="previous_subject_name"
+                               placeholder="Enter previous subject name"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Units
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               name="previous_units"
+                               min="0"
+                               step="0.01"
+                               placeholder="e.g. 3.00"
+                               required>
+
+                    </div>
+
+
+                    <!-- CURRICULUM SUBJECT -->
+                    <div class="col-12">
+
+                        <hr>
+
+                        <h6 class="text-primary fw-semibold">
+                            Equivalent Curriculum Subject
+                        </h6>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+                            Select Subject
+                        </label>
+
+                        <select class="form-select"
+                                name="curriculum_subject_id"
+                                id="curriculum_subject_id"
+                                required>
+
+                            <option value="">
+                                Select Curriculum Subject
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+                            Remarks
+                        </label>
+
+                        <textarea class="form-control"
+                                  name="remarks"
+                                  rows="3"
+                                  placeholder="Enter evaluation remarks..."></textarea>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary px-4"
+                        id="saveEvaluation">
+                    Save Evaluation
+                </button>
+
+            </div>
+
         </div>
 
-         <div class="col-md-12">
-            <label for="inputPassword4" class="form-label">Course Name</label>
-            <input type="text" class="form-control" name="edit_course_name" id="edit_course_name">
-            <div class="invalid-feedback" id="error-edit_course_name"></div>
-        </div>
-        
-          <div class="col-md-12">
-            <label for="inputPassword4" class="form-label">Course Name</label>
-            <input type="text" class="form-control" name="edit_course_name" id="edit_course_name">
-            <div class="invalid-feedback" id="error-edit_course_name"></div>
-        </div>
-
-        </form>
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="editCourseSubmit">Submit</button>
-        </div>
-        </div>
     </div>
+
 </div>
 
- <!-- show course modal -->
 
-<div class="modal fade" id="showCourseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="showModalTitle">Add Course</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeBtn"></button>
-        </div>
-        <div class="modal-body">
-            
-     <form class="row g-3" id="courseForm">
-
-        <div class="col-md-6">
-            <label for="inputEmail4" class="form-label">Course Code</label>
-            <input type="text" class="form-control"  id="show_course_code" readonly>
-        </div>
-
-        <div class="col-md-6">
-            <label for="inputPassword4" class="form-label">Course Years</label>
-            <input type="text" class="form-control" id="show_course_year" readonly>
-        </div>
-
-         <div class="col-md-12">
-            <label for="inputPassword4" class="form-label">Course Name</label>
-            <textarea type="text" class="form-control" id="show_course_name" readonly></textarea>
-        </div>
-
-        <div class="col-md-12">
-            <label for="inputPassword4" class="form-label">Course Description</label>
-            <textarea type="text" class="form-control" id="show_description" readonly></textarea>
-        </div>
-
-        
-        
-        </form>
-
-        </div>
-        </div>
-    </div>
-</div>
+<!-- SCRIPTS -->
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>   const BASE_URL = "<?php echo BASE_URL ?>" </script>
-<script src="<?php echo BASE_URL ?>/js/course.js"></script>
 
-<?php include  __DIR__ .'/../partials/footer.php'; ?>
+<script>
+    const BASE_URL = "<?php echo BASE_URL ?>";
+</script>
+
+<script src="<?php echo BASE_URL ?>/js/transferee_evaluation.js"></script>
+
+<?php include __DIR__ . '/../partials/footer.php'; ?>
