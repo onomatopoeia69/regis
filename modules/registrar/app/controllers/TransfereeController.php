@@ -175,6 +175,43 @@ use Throwable;
     }
 }
 
+    public function getApplicantEvaluatedSubjects($id)
+    {
+        $subjects = TransfereeEvaluations::getApplicantEvaluatedSubjects($id);
+
+        Response::json($subjects);
+    }
+
+    public function deleteEvaluation($id)
+{
+    try {
+
+        $deleted = TransfereeEvaluations::delete($id);
+
+        if (!$deleted) {
+            Response::json([
+                'success' => false,
+                'message' => 'Evaluation not found or cannot be deleted.'
+            ]);
+            return;
+        }
+
+        Response::json([
+            'success' => true,
+            'message' => 'Subject evaluation deleted successfully.'
+        ]);
+
+    } catch (Throwable $e) {
+
+        error_log($e->getMessage());
+
+        Response::json([
+            'success' => false,
+            'message' => 'An error occurred while deleting the evaluation.'
+        ]);
+    }
+}
+
 
 
  

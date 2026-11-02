@@ -373,6 +373,11 @@ $r->post('/transferee/evaluation/store',[TransfereeController::class,'store']);
 
 
 
+$r->get('/transferee/evaluation/subject/{id:\d+}',[TransfereeController::class,'getApplicantEvaluatedSubjects']);
+$r->post('/transferee/evaluation/{id:\d+}/delete',[TransfereeController::class,'deleteEvaluation']);
+
+
+
 
 // for all 
    
