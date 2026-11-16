@@ -25,22 +25,8 @@ $applicantName = trim(
     ($applicant['surname'] ?? '')
 );
 
-$total = count($evaluations);
-$approved = 0;
-$pending = 0;
-$rejected = 0;
 
-foreach ($evaluations as $evaluation) {
-    $status = strtolower($evaluation['status'] ?? 'pending');
 
-    if ($status === 'approved') {
-        $approved++;
-    } elseif ($status === 'rejected') {
-        $rejected++;
-    } else {
-        $pending++;
-    }
-}
 ?>
 
 <main class="main-content">
@@ -60,7 +46,7 @@ foreach ($evaluations as $evaluation) {
                 </p>
             </div>
 
-            <a href="<?= BASE_URL ?>/transferees"
+            <a href="<?= BASE_URL ?>/transferee-application"
                class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-left"></i>
                 Back to Applications

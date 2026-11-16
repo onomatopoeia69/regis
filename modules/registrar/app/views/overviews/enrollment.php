@@ -79,7 +79,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                    <?= $schoolYear ?>
+                                    <?= $currentEnrollment['school_year']  ?? 'No Data'?>
                                 </div>
 
                             </div>
@@ -94,7 +94,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                    <?= $semester['name'] ?>
+                                    <?= $currentEnrollment['semester'] ?? 'No Data' ?>
                                 </div>
 
                             </div>
@@ -110,7 +110,7 @@
 
                                 <div class="fw-semibold">
                                     
-                                   <?php switch($student_year) {
+                                   <?php switch($currentEnrollment['year_level'] ?? '9') {
 
                                         case '1':
                                              echo '1st Year';
@@ -124,6 +124,9 @@
                                                     case '4':
                                                         echo '4th Year';
                                                         break;
+                                                            default:
+                                                            echo "No Data";
+                                                            break;
                                          } 
                                          ?>
 
@@ -156,7 +159,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                <?= $section['section_code'] ?>
+                                <?= $currentEnrollment['section'] ?? 'No Data' ?>
                                 </div>
 
                             </div>
@@ -170,8 +173,8 @@
                                     Enrollment Status
                                 </div>
 
-                                <span class="badge bg-success-subtle text-success">
-                                    Enrolled
+                                <span class="fw-semibold">
+                                    <?= $currentEnrollment['enrollment_status'] ?? 'Not Enrolled'  ?>
                                 </span>
 
                             </div>
@@ -186,7 +189,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                   <?= $student_enrolled_at ?>
+                                   <?= $currentEnrollment['enrollment_date'] ?? 'No Data' ?>
                                 </div>
 
                             </div>
@@ -201,7 +204,7 @@
                                 </div>
 
                                 <div class="fw-semibold">
-                                    Regular
+                                <?= $currentEnrollment['academic_standing'] ?? 'No Data' ?>
                                 </div>
 
                             </div>
@@ -212,11 +215,11 @@
                             <div class="col-md-4">
 
                                 <div class="text-muted small mb-1">
-                                    Units Enrolled
+                                    Subjects Enrolled
                                 </div>
 
                                 <div class="fw-semibold">
-                                    <?= $totalUnitPerSem ?> Units
+                                    <?= $currentEnrollment['total_subjects']  ?? 'No Data' ?>
                                 </div>
 
                             </div>

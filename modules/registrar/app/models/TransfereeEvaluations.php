@@ -110,6 +110,27 @@ protected function getApplicantEvaluatedSubjects($applicantId)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    protected function getEvaluationSummary($applicant_id)
+    {
+        $sql = "
+            SELECT
+                COUNT(*) AS total,
+                SUM(status = 'approved') AS approved,
+                SUM(status = 'pending') AS pending,
+                SUM(status = 'rejected') AS rejected
+            FROM rgr_student_subject_evaluations
+            WHERE applicant_id = :applicant_id
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':applicant_id' => $applicant_id
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 
       public static function __callStatic($name, $arguments)

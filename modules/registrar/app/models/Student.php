@@ -63,96 +63,176 @@
 
 
 
-     protected function allEnrollmentsByStudentCurrrentSem(int $id)
-    {
+   
+protected function studentEnrolledSubjects(int $id)
+{
+    $sql = "
+         SELECT
+            enr.student_id,
+            enr.school_year,
+            enr.semester,
 
-        $sql = "
-            SELECT 
+            sec.section_code,
+
             rs.code AS subject_code,
             rs.name AS subject_name,
             rs.units AS units,
+
             ccf.first_name AS adviser_first_name,
             ccf.last_name AS adviser_last_name,
-            ccs.start_time AS start_time,
-            ccs.end_time AS end_time,
-            ccs.day_of_week AS day_of_week,
+
+            ccs.start_time,
+            ccs.end_time,
+            ccs.day_of_week,
+
             ccr.room_name AS room
-            FROM $this->tableName ens
+
+        FROM enr_enrollments enr
+
+        INNER JOIN rgr_school_years rsy
+            ON rsy.name = TRIM(enr.school_year)
+            AND rsy.is_active = 1
+
+        INNER JOIN rgr_semesters rsem
+            ON rsem.name = TRIM(enr.semester)
+            AND rsem.school_year_id = rsy.id
+            AND rsem.is_active = 1
+
+        INNER JOIN cc_schedule ccs
+            ON ccs.id = enr.schedule_id
+            AND ccs.semester_id = rsem.id
+
+        LEFT JOIN cc_sections sec
+            ON sec.id = enr.section_id
+
+        LEFT JOIN rgr_subjects rs
+            ON rs.id = ccs.subject_id
+
+        LEFT JOIN cc_room ccr
+            ON ccr.id = ccs.room_id
+
+        LEFT JOIN cc_faculty_load ccfl
+            ON ccfl.id = ccs.faculty_load_id
+
+        LEFT JOIN cc_faculty ccf
+            ON ccf.id = ccfl.faculty_id
+
+        WHERE enr.student_id = :studentId
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+    protected function allCurrentEnrollment(int $id)
+    {
+        $sql = "
+            SELECT
+            sy.name AS school_year,
+            sem.name AS semester,
+            s.year_level,
+            sec.section_code AS section,
+            e.enrollment_status,
+            MIN(e.enrollment_date) AS enrollment_date,
+            e.academic_standing,
+            COUNT(DISTINCT e.schedule_id) AS total_subjects
+
+        FROM enr_enrollments e
+
+        INNER JOIN rgr_school_years sy
+            ON sy.name = e.school_year
+            AND sy.is_active = 1
+
+        INNER JOIN rgr_semesters sem
+            ON sem.name = e.semester
+            AND sem.school_year_id = sy.id
+            AND sem.is_active = 1
+
+        LEFT JOIN enr_students s
+            ON s.student_id = e.student_id
+
+        INNER JOIN cc_sections sec
+            ON sec.id = e.section_id
+            
+        WHERE e.student_id = :studentId
+
+        GROUP BY
+            e.student_id,
+            sy.id,
+            sy.name,
+            sem.id,
+            sem.name,
+            s.year_level,
+            sec.section_code,
+            e.enrollment_status,
+            e.academic_standing
+        ";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    
+
+        protected function totalUnitByStudentPerSemester($id)
+        {
+            $sql = "
+            SELECT 
+            SUM(rsu.units) AS total_enrolled_units
+            FROM `enr_students` ens 
             JOIN enr_enrollments enr ON enr.student_id = ens.student_id
             JOIN cc_schedule ccs ON ccs.id = enr.schedule_id
-            JOIN rgr_semesters rsem ON rsem.id = ccs.semester_id
-            JOIN rgr_school_years rsy ON rsy.id = rsem.school_year_id
-            JOIN rgr_subjects rs ON rs.id = ccs.subject_id
-            JOIN cc_room ccr ON ccr.id = ccs.room_id
-            JOIN cc_faculty_load ccfl ON ccfl.id = ccs.faculty_load_id
-            JOIN cc_faculty ccf ON ccf.id = ccfl.faculty_id
-            WHERE ens.student_id = :studentId  
-            AND rsy.is_active = 1 
-            AND rsem.is_active = 1                                                           
-        ";
+            JOIN rgr_subjects rsu ON rsu.id = ccs.subject_id
+            JOIN rgr_semesters rs ON rs.id = ccs.semester_id
+            JOIN rgr_school_years rsc ON rsc.id = rs.school_year_id
+            WHERE ens.student_id = :studentId
+            AND rsc.is_active = 1
+            ";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-       
-    }
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // AND rsem.is_active = 1
-    // AND rsy.is_active = 1  
+        }
 
-    protected function totalUnitByStudentPerSemester($id)
-    {
-        $sql = "
-        SELECT 
-        SUM(rsu.units) AS total_enrolled_units
-        FROM `enr_students` ens 
-        JOIN enr_enrollments enr ON enr.student_id = ens.student_id
-        JOIN cc_schedule ccs ON ccs.id = enr.schedule_id
-        JOIN rgr_subjects rsu ON rsu.id = ccs.subject_id
-        JOIN rgr_semesters rs ON rs.id = ccs.semester_id
-        JOIN rgr_school_years rsc ON rsc.id = rs.school_year_id
-        WHERE ens.student_id = :studentId
-        AND rsc.is_active = 1
-        ";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-
-    }
-
+        
+        protected function sectionById(int $id)
+        {
     
-     protected function sectionById(int $id)
-    {
-  
-        $sql = "
-            SELECT 
-            ccs.* 
-            FROM $this->tableName ens
-            JOIN cc_sections ccs ON ccs.id = ens.section_id
-            WHERE $this->primaryKey = :studentId
-         ";
+            $sql = "
+                SELECT 
+                ccs.* 
+                FROM $this->tableName ens
+                JOIN cc_sections ccs ON ccs.id = ens.section_id
+                WHERE $this->primaryKey = :studentId
+            ";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-         
-    }
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':studentId', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+            
+        }
 
+        
+        public function activeSemester()
+        {
     
-     public function activeSemester()
-     {
-   
-        $sql = "SELECT id FROM rgr_semesters WHERE is_active = 1 LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-    
-        return $stmt->fetchColumn();
-    
-     }
+            $sql = "SELECT id FROM rgr_semesters WHERE is_active = 1 LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+        
+            return $stmt->fetchColumn();
+        
+        }
 
 
     protected function generateCor(int $id)

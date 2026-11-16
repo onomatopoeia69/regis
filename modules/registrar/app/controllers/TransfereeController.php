@@ -67,11 +67,18 @@ use Throwable;
     public function evaluation($id)
     {
         $applicant = Applicants::find($id);
-          $user = Employee::find('1014');
+        $user = Employee::find('1014');
         $semester = Semester::activeSemester();
         $schoolYear = SchoolYear::activeSchoolYear();
         $curriculum = TransfereeEvaluations::getActiveCurriculumByCourse($applicant['course_id']);
         $requirement_file = TransfereeEvaluations::getApplicantTOR($applicant['applicant_id']);
+
+        $summary = TransfereeEvaluations::getEvaluationSummary($applicant['applicant_id']);
+
+        $total = $summary['total'] ?? 0;
+        $approved = $summary['approved'] ?? 0;
+        $pending = $summary['pending'] ?? 0;
+        $rejected = $summary['rejected'] ?? 0;
         
 
         $this->render('/transferee/transferee_evaluation', [
@@ -80,7 +87,13 @@ use Throwable;
             'schoolYear' => $schoolYear,
             'applicant' => $applicant,
             'curriculum' => $curriculum,
-            'requirement_file' => $requirement_file
+            'requirement_file' => $requirement_file,
+            'summary' => $summary,
+            'total' => $total,
+            'approved' => $approved,
+            'pending' => $pending,
+            'rejected' => $rejected
+
         ]);
     }
 

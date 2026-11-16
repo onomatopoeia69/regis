@@ -70,7 +70,8 @@ class StudentController extends Controller {
         $allCourses = Course::all();
         $section = Student::sectionById($enrollee['student_id']);
         $totalUnitPerSem = Student::totalUnitByStudentPerSemester($enrollee['student_id']);
-        $enrollment = Student::allEnrollmentsByStudentCurrrentSem($enrollee['student_id']);
+        $currentEnrollment = Student::allCurrentEnrollment($enrollee['student_id']);
+        $enrollment = Student::studentEnrolledSubjects($enrollee['student_id']);
         $enrollHistory = Student::allEnrollmentHistory($enrollee['student_id']);
 
         $groupedCurriculum = [];
@@ -93,6 +94,7 @@ class StudentController extends Controller {
             'totalUnitPerSem' => $totalUnitPerSem['total_enrolled_units'],
             'curriculum_subject' => $curriculum_subject,
             'groupedCurriculum' => $groupedCurriculum,
+            'currentEnrollment' => $currentEnrollment,
             'totalUnits' => $totalUnits['total_units'] ?? 0,
             'student_enrolled_at' => date("F d, Y", strtotime($enrollee['enrolled_at'])),
             'student_year' => $enrollee['year_level'],
