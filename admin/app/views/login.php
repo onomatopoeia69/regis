@@ -222,11 +222,6 @@
                    Administrator <br>
                    Portal 
                 </h2>
-
-                <a href="#" class="brand-link">
-                    Student admission click here
-                </a>
-
             </div>
 
         </div>
