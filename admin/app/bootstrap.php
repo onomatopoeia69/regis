@@ -18,6 +18,11 @@ define('VIEW_PATH', APP_PATH . '/views');
 define('CACHE_PATH',BASE_PATH.'/cache');
 define('BASE_URL', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'));
 
+
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
+$projectRoot = dirname(dirname($scriptName));
+define('ROOT_URL',rtrim($projectRoot, '/') ?: '/');
+
 // autoloading 
 require_once BASE_PATH . '/vendor/autoload.php'; 
 

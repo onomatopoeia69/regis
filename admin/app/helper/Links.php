@@ -28,4 +28,20 @@
 
         }
 
+         public static function viewUrl($uri = '/')
+        {
+           if ($uri === '/' || $uri === 'base') {
+            return ROOT_URL;
+        }
+
+         return rtrim(ROOT_URL, '/') . '/' . ltrim($uri, '/');
+    
+        }
+
+         public static function viewGoto($uri = '/')
+        {
+            return self::viewUrl($uri);
+        }
+        
+
     }

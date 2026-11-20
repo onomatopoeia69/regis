@@ -222,6 +222,11 @@
                    Administrator <br>
                    Portal 
                 </h2>
+
+                <a href="<?= App\Helper\Links::viewGoto('/student/login') ?>" class="brand-link">
+                    Student admission click here
+                </a>
+
             </div>
 
         </div>
