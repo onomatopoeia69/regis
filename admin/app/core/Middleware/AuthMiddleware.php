@@ -12,7 +12,6 @@
         {
             if(!Auth::check())
             {
-
                 Response::redirect('/login');
             }
 

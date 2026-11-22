@@ -3,14 +3,19 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Auth;
 use App\Helper\Links;
 use App\Services\RateLimiter;
 
 class LoginController extends Controller
 {
-   
     public function index()
     {
+        if (Auth::check()) {
+            Links::redirect('/home');
+            exit;
+        }
+
         $this->render('/login');
     }
 
@@ -23,14 +28,24 @@ class LoginController extends Controller
         $username = trim($input['username'] ?? '');
         $password = $input['password'] ?? '';
 
+        if ($username === '' || $password === '') {
+            http_response_code(422);
+
+            echo json_encode([
+                'success' => false,
+                'error_type' => 'validation',
+                'message' => 'Username and password are required.'
+            ]);
+
+            exit;
+        }
+
         $rate = new RateLimiter(5, 60);
 
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $key = "login:$username:$ip";
 
-        // RATE LIMITER
         if ($rate->tooManyAttempts($key)) {
-
             http_response_code(429);
 
             echo json_encode([
@@ -42,72 +57,9 @@ class LoginController extends Controller
 
             exit;
         }
-    
 
-        // CALLING THE ENDPOINT
-        $ch = curl_init('https://portal.bcp-hrms.com/modules/portal/employee-api-login');
-
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Accept: application/json'
-            ],
-
-            CURLOPT_POSTFIELDS => json_encode([
-                'username' => $username,
-                'password' => $password
-            ]),
-
-            CURLOPT_TIMEOUT => 10
-        ]);
-
-        $response = curl_exec($ch);
-
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        $curlError = curl_error($ch);
-
-        curl_close($ch);
-
-        if ($response === false || $curlError) {
-
-            http_response_code(503);
-
-            echo json_encode([
-                'success' => false,
-                'error_type' => 'api_unavailable',
-                'message' => 'Authentication service is unavailable.'
-            ]);
-
-            exit;
-        }
-
-        // IF SUCCESS DECODE IT , HAHAHAHA
-
-        $result = json_decode($response, true);
-
-        if (!is_array($result)) {
-
-            http_response_code(502);
-
-            echo json_encode([
-                'success' => false,
-                'error_type' => 'invalid_api_response',
-                'message' => 'Invalid response from authentication service.'
-            ]);
-
-            exit;
-        }
-
-
-        if (
-            $httpCode !== 200 ||
-            !($result['success'] ?? false)
-        ) {
-
+        // AUTHENTICATE USING YOUR DATABASE
+        if (!Auth::attempt($username, $password)) {
             $rate->hit($key);
 
             http_response_code(401);
@@ -115,64 +67,47 @@ class LoginController extends Controller
             echo json_encode([
                 'success' => false,
                 'error_type' => 'invalid_input',
-                'message' => $result['message']
-                    ?? 'Invalid username or password.'
+                'message' => 'Invalid username or password.'
             ]);
 
             exit;
         }
 
+        // ADMIN ROLE CHECK
+        // Replace these example IDs with your actual admin role IDs.
+        $allowedRoles = [1, 2, 3];
 
-    
-        $employee = $result['data'] ?? null;
+        if (!Auth::hasRole($allowedRoles)) {
+            Auth::logout();
 
-        if (!$employee || !isset($employee['id'])) {
+            $rate->hit($key);
 
-            http_response_code(502);
+            http_response_code(403);
 
             echo json_encode([
                 'success' => false,
-                'error_type' => 'invalid_api_response',
-                'message' => 'Authentication service returned incomplete user data.'
+                'error_type' => 'unauthorized_role',
+                'message' => 'You are not authorized to access the admin portal.'
             ]);
 
             exit;
         }
 
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION['emp_user_id'] = $employee['id'];
-        $_SESSION['employee_name'] = $employee['employee_name'];
-        $_SESSION['username'] = $employee['username'];
-        $_SESSION['role'] = $employee['role'];
-        $_SESSION['is_admin'] = $employee['is_admin'];
-
-
-    
+        // SUCCESS
         $rate->clear($key);
 
         echo json_encode([
             'success' => true,
+            'message' => 'Login successful.',
             'redirect' => Links::goTo('/home')
         ]);
 
         exit;
     }
 
-    
-
     public function logout()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION = [];
-
-        session_destroy();
+        Auth::logout();
 
         Links::redirect('/login');
         exit;
