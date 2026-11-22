@@ -58,7 +58,6 @@ class LoginController extends Controller
             exit;
         }
 
-        // AUTHENTICATE USING YOUR DATABASE
         if (!Auth::attempt($username, $password)) {
             $rate->hit($key);
 
@@ -73,9 +72,7 @@ class LoginController extends Controller
             exit;
         }
 
-        // ADMIN ROLE CHECK
-        // Replace these example IDs with your actual admin role IDs.
-        $allowedRoles = [1, 2, 3];
+        $allowedRoles = [2];
 
         if (!Auth::hasRole($allowedRoles)) {
             Auth::logout();
@@ -93,7 +90,6 @@ class LoginController extends Controller
             exit;
         }
 
-        // SUCCESS
         $rate->clear($key);
 
         echo json_encode([

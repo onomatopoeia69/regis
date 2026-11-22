@@ -76,7 +76,13 @@ document.getElementById('loginForm').addEventListener('submit', async function (
              }, 1000);
              
                 break;
+
             case 'invalid_input':
+                alertBox.classList.remove('d-none');
+                alertBox.textContent =  `${data.message}`;
+               break;
+
+            case 'unauthorized_role':
                 alertBox.classList.remove('d-none');
                 alertBox.textContent =  `${data.message}`;
                break;
