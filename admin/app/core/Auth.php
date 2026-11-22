@@ -21,6 +21,10 @@ class Auth
         Session::set('role_id', (int) $user['role_id']);
         Session::set('role_name', $user['role_name']);
         Session::set('authenticated', true);
+        Session::set('first_name', $user['first_name']);
+        Session::set('last_name', $user['last_name']);
+        Session::set('email', $user['email']);
+        Session::set('username', $user['username']);
 
         return true;
     }
